@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Altman on 2015/10/3.
  */
 public class DBHelper extends SQLiteOpenHelper {
+    //Define database for storing quests
     public static final String DATABASE_NAME = "questlist.db";
     public static final int VERSION = 1;
     public static SQLiteDatabase database;
@@ -33,8 +34,19 @@ public class DBHelper extends SQLiteOpenHelper {
                     CATAGORY + " TEXT NOT NULL, " +
                     EXPIRYDATE + " TEXT NOT NULL, " +
                     REQUIREDLANGUAGE + " TEXT NOT NULL, " +
+                    //USER + " TEXT NOT NULL," +
                     LOCATION + " TEXT NOT NULL)";
 
+    //Define table for storing user login information
+    public static final String USER_TABLE_NAME = "users";
+    public static final String PASSWORD = "password";
+    public static final String ICONPATH = "icon_path";
+
+    public static final String USER_CREATE_TABLE =
+            "CREATE TABLE "+USER_TABLE_NAME+"("+KEY_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                    USER + " TEXT NOT NULL," +
+                    PASSWORD + " TEXT NOT NULL," +
+                    ICONPATH + " TEXT NOT NULL)";
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context, name, factory, version);
@@ -60,6 +72,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE);
+        db.execSQL(USER_CREATE_TABLE);
     }
 
     @Override

@@ -4,16 +4,15 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
-import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -21,20 +20,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -85,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
     Spinner catagoryspinner, languagespinner;
     CheckBox termofusecheckbox;
 
+    //DrawerLayout define
+    TextView contentView;
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +89,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //set up navigation drawer buttons
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
+        view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                String title = (String) menuItem.getTitle();
+                if(title.equals("My Account")){
+                    Toast.makeText(MainActivity.this, menuItem.getTitle() + " pressed", Toast.LENGTH_LONG).show();
+                }
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawers();
+                return true;
+            }
+        });
+
+        //set up float button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 datepicker();
-                //timepicker();
             }
         });
         catagoryspinner = (Spinner) view.findViewById(R.id.catspinner);
@@ -248,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
                                     cv.put(DBHelper.LOCATION, locationedittext.getText().toString());
                                     cv.put(DBHelper.CATAGORY, catagoryspinner.getSelectedItem().toString());
                                     cv.put(DBHelper.REQUIREDLANGUAGE, languagespinner.getSelectedItem().toString());
-                                    //cv.put(DBHelper.USER, username);
+                                    cv.put(DBHelper.USER, "username");
 
                                     db.insert(DBHelper.TABLE_NAME, null, cv);
                                     db.close();

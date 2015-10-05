@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_1"
+            android:checked="true"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Quest List"/>
+        <item
+            android:id="@+id/navigation_item_2"
+            android:icon="@mipmap/ic_launcher"
+            android:title="My Account"/>
+        <item
+            android:id="@+id/navigation_item_3"
+            android:icon="@mipmap/ic_launcher"
+            android:title="zuyoChat!"/>
+        <item
+            android:id="@+id/navigation_item_4"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Share"/>
+        <item
+            android:id="@+id/Setting"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Setting"/>
+    </group>
+</menu>
