@@ -12,16 +12,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -40,7 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
     //Setup context
     Context context = this;
 
@@ -53,20 +52,8 @@ public class MainActivity extends AppCompatActivity {
     int mDate = time.get(Calendar.DATE);
     StringBuilder builder = new StringBuilder();
 
-    //Define for list view
-    TextView title, expirydate;
-    ImageView icon;
-    List<String> titlelist = new ArrayList<>();
-    List<String> expirydatelist = new ArrayList<>();
-    List<String> catagorylist = new ArrayList<>();
-    List<String> infolist = new ArrayList<>();
-    List<String> langlist = new ArrayList<>();
-    List<String> locationlist = new ArrayList<>();
-    ListAdapter adapter;
-
     String[] catagoryspinnerlist = {"Resource Donation", "Manpower recruitment", "Specialist recruitment"};
     String[] languagespinnerlist = {"Chinese", "English", "Mandarin", "Japanese", "French"};
-
 
     //setup DBHelper
     SQLiteDatabase db;
@@ -87,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        changeQuestList();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        changeQuestList();
         //set up navigation drawer buttons
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
@@ -96,8 +84,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 String title = (String) menuItem.getTitle();
+                if(title.equals("Quest List")){
+                    changeQuestList();
+                }
                 if(title.equals("My Account")){
-                    Toast.makeText(MainActivity.this, menuItem.getTitle() + " pressed", Toast.LENGTH_LONG).show();
+                    changeMyAccount();
+                }
+                if(title.equals("zuyoChat!")){
+                    changezuyoChat();
+                }
+                if(title.equals("Share")){
+                    changeShare();
+                }
+                if(title.equals("Setting")){
+                    changeSetting();
                 }
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
@@ -116,82 +116,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void changeSetting(){
+    }
+
+    private void changeShare() {
+    }
+
+    private void changezuyoChat() {
+
+    }
+
+    private void changeMyAccount() {
+
+    }
+
+    public void changeQuestList() {
+        QuestListFragment fragment1 = new QuestListFragment();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+    }
+
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
-        setlist();
     }
 
-    public void setlist(){
-        ListView list = (ListView) findViewById(R.id.list);
-
-        db = helper.getReadableDatabase();
-        cursor = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME, null);
-
-        titlelist.clear();
-        expirydatelist.clear();
-        infolist.clear();
-        catagorylist.clear();
-        langlist.clear();
-        locationlist.clear();
-
-        while(cursor.moveToNext()){
-            titlelist.add(cursor.getString(cursor.getColumnIndex("quest_title")));
-            expirydatelist.add(cursor.getString(cursor.getColumnIndex("expiry_date")));
-            infolist.add(cursor.getString(cursor.getColumnIndex("quest_info")));
-            catagorylist.add(cursor.getString(cursor.getColumnIndex("catagory")));
-            langlist.add(cursor.getString(cursor.getColumnIndex("required_language")));
-            locationlist.add(cursor.getString(cursor.getColumnIndex("quest_location")));
-        }
-        db.close();
-
-        adapter = new ListAdapter(this);
-        adapter.notifyDataSetChanged();
-        list.setAdapter(adapter);
-
-    }
-    public class ListAdapter extends BaseAdapter {
-        private LayoutInflater ListInflater;
-
-        public ListAdapter(Context c){
-            ListInflater = LayoutInflater.from(c);
-        }
-
-        @Override
-        public int getCount() {
-            return titlelist.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return titlelist.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            convertView = ListInflater.inflate(R.layout.questitem, null);
-
-            title = (TextView)convertView.findViewById(R.id.titletextview);
-            expirydate = (TextView)convertView.findViewById(R.id.expirydatetextview);
-            icon = (ImageView)convertView.findViewById(R.id.imageView);
-
-            title.setText(titlelist.get(position));
-            expirydate.setText(expirydatelist.get(position));
-
-
-            return convertView;
-        }
-    }
-
-
+    //Implementing the add quest float
     public void addquest(){
         //Set variable
         LayoutInflater inflater = getLayoutInflater();
@@ -245,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             if (locationedittext.getText().toString().equals("")||locationedittext.getText().toString().equals("Location cannot be null!")) {
                                 sethighlight(locationedittext, "Location");
-                                return;
+                               return;
                             } else {
                                 if (termofusecheckbox.isChecked() == false) {
                                     Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
@@ -295,8 +246,6 @@ public class MainActivity extends AppCompatActivity {
         }, mYear, mMonth, mDate);
         dpd.show();
     }
-
-
     public void timepicker(){
         TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -319,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
         }, mHour, mMinute, false);
         tpd.show();
     }
-
     public void sethighlight(EditText v, String type){
         v.setText(type + " cannot be null!");
         v.setTextColor(Color.RED);
