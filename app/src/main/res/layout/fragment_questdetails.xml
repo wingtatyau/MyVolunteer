@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/icon"
         android:layout_marginTop="20dp"
-        android:text = "Cheung FONG"
+        android:text = "MASK WANTED!"
         android:id = "@+id/name"
         android:textColor="#000000"
         android:textSize="24dp"/>
@@ -24,15 +24,15 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/icon"
         android:layout_marginTop="48dp"
-        android:id = "@+id/organization"
-        android:text = "LapLap Home"
+        android:id = "@+id/expirydate"
+        android:text = "Expiry Date: "
         android:textSize="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id = "@+id/contacttextview"
-        android:text = "CONTACT"
+        android:text = "QUEST SITUATION"
         android:textSize="16dp"
         android:textColor="#3F51B5"
         android:layout_below="@+id/icon"
@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id = "@+id/questissuetextview"
-        android:text = "QUEST ISSUED"
+        android:text = "QUEST DETAIL"
         android:textSize="16dp"
         android:textColor="#3F51B5"
         android:layout_below="@+id/contactright"
@@ -111,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id = "@+id/questaccepttextview"
-        android:text = "QUEST ACCEPTED"
+        android:text = "QUEST LOCATION"
         android:textSize="16dp"
         android:textColor="#3F51B5"
         android:layout_below="@+id/issueright"
@@ -140,11 +140,40 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/acceptright"
+        android:id="@+id/right"
         android:text = "template"
         android:textSize="24dp"
-        android:layout_below="@+id/view3"
-        android:layout_alignRight="@+id/view"
-        android:layout_alignEnd="@+id/view" />
+        android:layout_below="@+id/view4"
+        android:layout_alignLeft="@+id/view4"
+        android:layout_alignStart="@+id/view4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/contactpersontextview"
+        android:text="CONTACT PERSON"
+        android:textSize="16dp"
+        android:textColor="#3F51B5"
+        android:layout_below="@+id/location"
+        android:layout_alignLeft="@+id/location"
+        android:layout_alignStart="@+id/location" />
+
+    <View
+        android:layout_width = "match_parent"
+        android:layout_height = "1dp"
+        android:layout_alignBottom="@+id/contactpersontextview"
+        android:background="#3F51B5"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:id="@+id/view4" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ACCEPT QUEST"
+        android:id="@+id/acceptbutton"
+        android:layout_below="@+id/right"
+        android:layout_alignRight="@+id/view4"
+        android:layout_alignEnd="@+id/view4" />
 
 </RelativeLayout>

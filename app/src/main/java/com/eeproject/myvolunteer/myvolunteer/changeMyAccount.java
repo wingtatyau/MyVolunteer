@@ -23,4 +23,12 @@ public class changeMyAccount extends Fragment {
     public void init(View v){
 
     }
+
+    //Open database, table_name = user, retrieve the data from the database
+    //User database is not yet built
+
+    public void getinformation(){
+
+    }
+
 }

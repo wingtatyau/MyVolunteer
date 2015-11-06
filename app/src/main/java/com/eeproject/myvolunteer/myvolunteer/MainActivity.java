@@ -127,7 +127,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void changeMyAccount() {
-
+        changeMyAccount fragment1 = new changeMyAccount();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
     public void changeQuestList() {
