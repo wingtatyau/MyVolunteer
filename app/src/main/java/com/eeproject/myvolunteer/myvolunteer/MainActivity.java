@@ -43,28 +43,7 @@ public class MainActivity extends FragmentActivity {
     //Setup context
     Context context = this;
 
-    //Setup timepicker
-    final Calendar time = Calendar.getInstance();
-    int mHour = time.get(Calendar.HOUR_OF_DAY);
-    int mMinute = time.get(Calendar.MINUTE);
-    int mYear = time.get(Calendar.YEAR);
-    int mMonth = time.get(Calendar.MONTH);
-    int mDate = time.get(Calendar.DATE);
-    StringBuilder builder = new StringBuilder();
 
-    String[] catagoryspinnerlist = {"Resource Donation", "Manpower recruitment", "Specialist recruitment"};
-    String[] languagespinnerlist = {"Chinese", "English", "Mandarin", "Japanese", "French"};
-
-    //setup DBHelper
-    SQLiteDatabase db;
-    public DBHelper helper = new DBHelper(MainActivity.this, DBHelper.DATABASE_NAME);
-    Cursor cursor;
-
-    //Setup float
-    Button submit;
-    EditText titleedittext, infoedittext, dateedittext, locationedittext;
-    Spinner catagoryspinner, languagespinner;
-    CheckBox termofusecheckbox;
 
     //DrawerLayout define
     TextView contentView;
@@ -84,6 +63,9 @@ public class MainActivity extends FragmentActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 String title = (String) menuItem.getTitle();
+                if(title.equals("Add Quest")){
+                    changeaddquest();
+                }
                 if(title.equals("Quest List")){
                     changeQuestList();
                 }
@@ -104,16 +86,11 @@ public class MainActivity extends FragmentActivity {
                 return true;
             }
         });
+    }
 
-        //set up float button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addquest();
-            }
-        });
-
+    private void changeaddquest(){
+        addquestfragment fragment1 = new addquestfragment();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
     private void changeSetting(){
@@ -136,6 +113,12 @@ public class MainActivity extends FragmentActivity {
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
+    public void changelogin(){
+        login fragment1 = new login();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+    }
+
+
 
 
     @Override
@@ -143,136 +126,6 @@ public class MainActivity extends FragmentActivity {
         super.onWindowFocusChanged(hasFocus);
     }
 
-    //Implementing the add quest float
-    public void addquest(){
-        //Set variable
-        LayoutInflater inflater = getLayoutInflater();
-        final View view = inflater.inflate(R.layout.addquestfloat, null);
-
-        titleedittext = (EditText)view.findViewById(R.id.titleedittext);
-        infoedittext = (EditText)view.findViewById(R.id.infoedittext);
-        dateedittext = (EditText)view.findViewById(R.id.dateedittext);
-        locationedittext = (EditText)view.findViewById(R.id.locationedittext);
-
-        dateedittext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datepicker();
-            }
-        });
-        catagoryspinner = (Spinner) view.findViewById(R.id.catspinner);
-        languagespinner = (Spinner) view.findViewById(R.id.langspinner);
-
-        ArrayAdapter<String> catadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, catagoryspinnerlist);
-        catagoryspinner.setAdapter(catadapter);
-
-        ArrayAdapter<String> langadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, languagespinnerlist);
-        languagespinner.setAdapter(langadapter);
-
-        termofusecheckbox = (CheckBox)view.findViewById(R.id.termofusecheckBox);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Input a quest here!");
-        builder.setView(view);
-
-        builder.setPositiveButton("Submit", null);
-
-        final AlertDialog alert = builder.create();
-        alert.show();
-
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(titleedittext.getText().toString().equals("")||titleedittext.getText().toString().equals("Title cannot be null!")){
-                    sethighlight(titleedittext, "Title");
-                    return;
-                }else {
-                    if (infoedittext.getText().toString().equals("")||infoedittext.getText().toString().equals("Information cannot be null!")) {
-                        sethighlight(infoedittext, "Information");
-                        return;
-                    } else {
-                        if (dateedittext.getText().toString().equals("")||dateedittext.getText().toString().equals("Date cannot be null!")) {
-                            sethighlight(dateedittext, "Date");
-                            return;
-                        } else {
-                            if (locationedittext.getText().toString().equals("")||locationedittext.getText().toString().equals("Location cannot be null!")) {
-                                sethighlight(locationedittext, "Location");
-                               return;
-                            } else {
-                                if (termofusecheckbox.isChecked() == false) {
-                                    Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
-                                    return;
-                                } else {
-                                    db = helper.getWritableDatabase();
-
-                                    ContentValues cv = new ContentValues();
-
-                                    cv.put(DBHelper.TITLE, titleedittext.getText().toString());
-                                    cv.put(DBHelper.INFO, infoedittext.getText().toString());
-                                    cv.put(DBHelper.EXPIRYDATE, dateedittext.getText().toString());
-                                    cv.put(DBHelper.LOCATION, locationedittext.getText().toString());
-                                    cv.put(DBHelper.CATAGORY, catagoryspinner.getSelectedItem().toString());
-                                    cv.put(DBHelper.REQUIREDLANGUAGE, languagespinner.getSelectedItem().toString());
-                                    cv.put(DBHelper.USER, "username");
-
-                                    db.insert(DBHelper.TABLE_NAME, null, cv);
-                                    db.close();
-                                    alert.dismiss();
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-    }
-    public void datepicker(){
-        builder.setLength(0);
-        DatePickerDialog dpd = new DatePickerDialog(this, new OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
-                String datestring = dayOfMonth + "-" + (monthOfYear+1) + "-" + year;
-                Date datetime;
-                try {
-                    datetime = sdf.parse(datestring);
-                    builder.append(sdf.format(datetime).toString() + " ");
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                timepicker();
-            }
-        }, mYear, mMonth, mDate);
-        dpd.show();
-    }
-    public void timepicker(){
-        TimePickerDialog tpd = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                // Display Selected time in textbox
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                String timestring = hourOfDay + ":" + minute;
-                Date datetime;
-                try {
-                    datetime = sdf.parse(timestring);
-                    builder.append(sdf.format(datetime).toString());
-                    dateedittext.setText(builder.toString());
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }, mHour, mMinute, false);
-        tpd.show();
-    }
-    public void sethighlight(EditText v, String type){
-        v.setText(type + " cannot be null!");
-        v.setTextColor(Color.RED);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

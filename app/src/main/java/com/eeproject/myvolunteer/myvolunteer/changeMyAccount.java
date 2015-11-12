@@ -12,19 +12,28 @@ import android.view.ViewGroup;
  */
 public class changeMyAccount extends Fragment {
     Context context;
+    boolean login = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_questlistfragment, null);
         context = container.getContext();
+
+        //Initialize the boolean, if login-ed, changed to true;
+
+        init(v);
         return v;
     }
 
-    //Iniitalize the content of the layout
-    //use findViewbyId to get the element and edit the element
-    //maybe using for loop or arraylist to append the value into the id
-    public void init(View v){
-
+    public void init(View v) {
+        if(login = false) {
+            login fragment1 = new login();
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.activity_main, null);
+            getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+        }else{
+            //perform displaying actions
+        }
     }
 
     //Open database, table_name = user, retrieve the data from the database

@@ -4,17 +4,26 @@
             android:id="@+id/navigation_item_1"
             android:checked="true"
             android:icon="@mipmap/ic_launcher"
-            android:title="Quest List"/>
+            android:title="Add Quest"/>
         <item
             android:id="@+id/navigation_item_2"
+            android:checked="true"
             android:icon="@mipmap/ic_launcher"
-            android:title="My Account"/>
+            android:title="Quest List"/>
         <item
             android:id="@+id/navigation_item_3"
             android:icon="@mipmap/ic_launcher"
-            android:title="zuyoChat!"/>
+            android:title="My Account"/>
         <item
             android:id="@+id/navigation_item_4"
+            android:icon="@mipmap/ic_launcher"
+            android:title="zuyoChat!"/>
+        <item
+            android:id="@+id/navigation_item_5"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Ranking"/>
+        <item
+            android:id="@+id/navigation_item_6"
             android:icon="@mipmap/ic_launcher"
             android:title="Share"/>
         <item

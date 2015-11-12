@@ -53,7 +53,7 @@
         android:layout_marginLeft="10dp"
         android:minLines="3"
         android:layout_marginRight="10dp"
-         />
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -150,5 +150,14 @@
         android:layout_below="@+id/dateedittext"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/submitbutton"
+        android:layout_below="@+id/termofusecheckBox"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
