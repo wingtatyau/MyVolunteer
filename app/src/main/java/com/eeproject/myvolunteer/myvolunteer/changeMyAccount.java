@@ -20,6 +20,9 @@ public class changeMyAccount extends Fragment {
         return v;
     }
 
+    //Iniitalize the content of the layout
+    //use findViewbyId to get the element and edit the element
+    //maybe using for loop or arraylist to append the value into the id
     public void init(View v){
 
     }
