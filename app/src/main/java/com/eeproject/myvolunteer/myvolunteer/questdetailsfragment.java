@@ -24,6 +24,7 @@ public class questdetailsfragment extends Fragment {
     public void init(View v){
         //put the function that are going to run here
         //Setup onClickListener for ACCEPT button, which is for logging back to the database who accepted the quest already
+        //new
     }
 
     public void getinformation(){
