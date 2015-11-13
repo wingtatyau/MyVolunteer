@@ -25,6 +25,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String LOCATION = "quest_location";
     public static final String TERM_OF_USE = "term_of_use";
     public static final String USER = "user";
+    public static final String ACCEPTED_USER = "accepted_user";
+    public static final String QUEST_CURRENT_PARTI = "quest_current_parti";
+    public static final String QUEST_REQUIRED_TIME = "quest_required_time";
+    public static final String PARTI_NUMBER = "parti_number";
 
 
     public static final String CREATE_TABLE =
@@ -34,7 +38,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     CATAGORY + " TEXT NOT NULL, " +
                     EXPIRYDATE + " TEXT NOT NULL, " +
                     REQUIREDLANGUAGE + " TEXT NOT NULL, " +
-                    //USER + " TEXT NOT NULL," +
+                    USER + " TEXT NOT NULL," +
+                    ACCEPTED_USER + " INTEGER NOT NULL" +
+                    QUEST_CURRENT_PARTI + " INTEGER NOT NULL" +
+                    QUEST_REQUIRED_TIME + " TEXT NOT NULL" +
+                    PARTI_NUMBER + " TEXT NOT NULL" +
                     LOCATION + " TEXT NOT NULL)";
 
     //Define table for storing user login information
@@ -65,7 +73,6 @@ public class DBHelper extends SQLiteOpenHelper {
             database = new DBHelper(context, DATABASE_NAME,
                     null, VERSION).getWritableDatabase();
         }
-
         return database;
     }
 

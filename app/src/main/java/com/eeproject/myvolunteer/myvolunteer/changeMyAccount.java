@@ -26,7 +26,7 @@ public class changeMyAccount extends Fragment {
     }
 
     public void init(View v) {
-        if(login = false) {
+        if(login == false) {
             login fragment1 = new login();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.activity_main, null);

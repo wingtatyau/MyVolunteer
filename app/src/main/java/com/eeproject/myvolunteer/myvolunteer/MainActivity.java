@@ -1,43 +1,20 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog;
-import android.content.ContentValues;
+
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends FragmentActivity {
     //Setup context
@@ -55,7 +32,14 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         changeQuestList();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        changeQuestList();
+        toolbar.setTitle("We are Volunteer!");
+        toolbar.setNavigationIcon(R.drawable.nomoregood_small);
+
+        //Get Intent
+        Intent intent = getIntent();
+        String position = intent.getStringExtra("position");
+
+
         //set up navigation drawer buttons
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView view = (NavigationView) findViewById(R.id.navigation_view);
@@ -63,23 +47,26 @@ public class MainActivity extends FragmentActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 String title = (String) menuItem.getTitle();
-                if(title.equals("Add Quest")){
+                if (title.equals("Add Quest")) {
                     changeaddquest();
                 }
-                if(title.equals("Quest List")){
+                if (title.equals("Quest List")) {
                     changeQuestList();
                 }
-                if(title.equals("My Account")){
+                if (title.equals("My Account")) {
                     changeMyAccount();
                 }
-                if(title.equals("zuyoChat!")){
+                if (title.equals("zuyoChat!")) {
                     changezuyoChat();
                 }
-                if(title.equals("Share")){
+                if (title.equals("Share")) {
                     changeShare();
                 }
-                if(title.equals("Setting")){
+                if (title.equals("Setting")) {
                     changeSetting();
+                }
+                if (title.equals("Ranking")) {
+                    changeRanking();
                 }
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
@@ -88,9 +75,23 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
+
+
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("MainActivity", "popping backstack");
+            fm.popBackStack();
+        } else {
+            Log.i("MainActivity", "nothing on backstack, calling super");
+            super.onBackPressed();
+        }
+    }
+
     private void changeaddquest(){
         addquestfragment fragment1 = new addquestfragment();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 
     private void changeSetting(){
@@ -103,23 +104,25 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    private void changeRanking() {
+        rankingfragment fragment1 = new rankingfragment();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+    }
+
     private void changeMyAccount() {
         changeMyAccount fragment1 = new changeMyAccount();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 
     public void changeQuestList() {
         QuestListFragment fragment1 = new QuestListFragment();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 
     public void changelogin(){
         login fragment1 = new login();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
-
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus){
@@ -148,4 +151,5 @@ public class MainActivity extends FragmentActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

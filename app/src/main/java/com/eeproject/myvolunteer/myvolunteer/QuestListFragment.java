@@ -2,6 +2,8 @@ package com.eeproject.myvolunteer.myvolunteer;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,6 +42,8 @@ public class QuestListFragment extends Fragment {
     List<String> langlist = new ArrayList<>();
     List<String> locationlist = new ArrayList<>();
     ListAdapter adapter;
+
+    Spinner catagoryspinner, languagespinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +79,16 @@ public class QuestListFragment extends Fragment {
         }
         db.close();
 
+
+        catagoryspinner = (Spinner) v.findViewById(R.id.catspinner);
+        languagespinner = (Spinner) v.findViewById(R.id.langspinner);
+
+        ArrayAdapter<String> catadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.catagory);
+        catagoryspinner.setAdapter(catadapter);
+
+        ArrayAdapter<String> langadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.language);
+        languagespinner.setAdapter(langadapter);
+
         adapter = new ListAdapter(context);
         adapter.notifyDataSetChanged();
         list.setAdapter(adapter);
@@ -81,7 +97,11 @@ public class QuestListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(getActivity().getBaseContext(), MainActivity.class);
+                intent.putExtra("position", position);
+                getActivity().startActivity(intent);
+                questdetailsfragment fragment1 = new questdetailsfragment();
+                getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
             }
         });
 
@@ -120,7 +140,10 @@ public class QuestListFragment extends Fragment {
 
             title.setText(titlelist.get(position));
             expirydate.setText(expirydatelist.get(position));
-
+            int rand = (int)Math.random();
+            String drawableName = parameter.defaulticonpath[rand];
+            int resID = getResources().getIdentifier(drawableName, "drawable", "com.eeproject.myvolunteer.myvolunteer");
+            icon.setImageResource(resID);
 
             return convertView;
         }

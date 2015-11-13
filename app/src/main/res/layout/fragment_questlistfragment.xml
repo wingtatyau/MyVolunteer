@@ -1,19 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <RelativeLayout
+        android:layout_row = "0"
+        android:layout_column="0"
+        android:layout_width = "wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Catagory:"
+            android:id = "@id/cattextview"
+            android:layout_margin="5dp"
+        />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/catspinner"
+            android:layout_toRightOf="@+id/cattextview"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Language: "
+            android:id = "@+id/langtextveiw"
+            android:layout_margin ="5dp"
+            android:layout_below="@id/cattextview"
+            />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id = "@+id/langspinner"
+            android:layout_toRightOf="@id/langtextveiw"
+            android:layout_below = "@+id/catspinner"
+            />
+
+
+    </RelativeLayout>
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="562dp"
+        android:layout_height="450dp"
         android:id = "@+id/list"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_gravity="center_horizontal|top">
+        android:layout_gravity="center_horizontal|top"
+        android:layout_row="1"
+        android:layout_column="0">
     </ListView>
 
 
-</LinearLayout>
+
+</GridLayout>

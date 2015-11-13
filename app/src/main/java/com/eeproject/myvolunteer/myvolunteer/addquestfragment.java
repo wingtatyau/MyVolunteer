@@ -48,9 +48,6 @@ public class addquestfragment extends Fragment {
     Spinner catagoryspinner, languagespinner;
     CheckBox termofusecheckbox;
 
-    String[] catagoryspinnerlist = {"Resource Donation", "Manpower recruitment", "Specialist recruitment"};
-    String[] languagespinnerlist = {"Chinese", "English", "Mandarin", "Japanese", "French"};
-
     //setup DBHelper
     SQLiteDatabase db;
     public DBHelper helper;
@@ -77,6 +74,8 @@ public class addquestfragment extends Fragment {
         dateedittext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dateedittext.setText("");
+                builder.setLength(0);
                 datepicker();
             }
         });
@@ -84,10 +83,10 @@ public class addquestfragment extends Fragment {
         catagoryspinner = (Spinner) view.findViewById(R.id.catspinner);
         languagespinner = (Spinner) view.findViewById(R.id.langspinner);
 
-        ArrayAdapter<String> catadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, catagoryspinnerlist);
+        ArrayAdapter<String> catadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.catagory);
         catagoryspinner.setAdapter(catadapter);
 
-        ArrayAdapter<String> langadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, languagespinnerlist);
+        ArrayAdapter<String> langadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.language);
         languagespinner.setAdapter(langadapter);
 
         termofusecheckbox = (CheckBox)view.findViewById(R.id.termofusecheckBox);
@@ -99,23 +98,18 @@ public class addquestfragment extends Fragment {
             public void onClick(View v) {
                 if (titleedittext.getText().toString().equals("") || titleedittext.getText().toString().equals("Title cannot be null!")) {
                     sethighlight(titleedittext, "Title");
-                    return;
                 } else {
                     if (infoedittext.getText().toString().equals("") || infoedittext.getText().toString().equals("Information cannot be null!")) {
                         sethighlight(infoedittext, "Information");
-                        return;
                     } else {
                         if (dateedittext.getText().toString().equals("") || dateedittext.getText().toString().equals("Date cannot be null!")) {
                             sethighlight(dateedittext, "Date");
-                            return;
                         } else {
                             if (locationedittext.getText().toString().equals("") || locationedittext.getText().toString().equals("Location cannot be null!")) {
                                 sethighlight(locationedittext, "Location");
-                                return;
                             } else {
                                 if (termofusecheckbox.isChecked() == false) {
                                     Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
-                                    return;
                                 } else {
                                     db = helper.getWritableDatabase();
 
@@ -131,6 +125,9 @@ public class addquestfragment extends Fragment {
 
                                     db.insert(DBHelper.TABLE_NAME, null, cv);
                                     db.close();
+                                    Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
+                                    QuestListFragment fragment1 = new QuestListFragment();
+                                    getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
                                 }
                             }
                         }
