@@ -2,162 +2,252 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     >
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="QUEST TITLE"
-        android:id="@+id/titletextview"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="QUEST TITLE"
+            android:id="@+id/titletextview"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/titleedittext"
-        android:layout_below="@+id/titletextview"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:maxLines="1" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleedittext"
+            android:layout_below="@+id/titletextview"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:maxLines="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="QUEST INFORMATION"
-        android:id="@+id/infotextview"
-        android:layout_below="@+id/titleedittext"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="QUEST INFORMATION"
+            android:id="@+id/infotextview"
+            android:layout_below="@+id/titleedittext"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/infoedittext"
-        android:layout_below="@+id/infotextview"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="10dp"
-        android:minLines="3"
-        android:layout_marginRight="10dp"
-        />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/infoedittext"
+            android:layout_below="@+id/infotextview"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="10dp"
+            android:minLines="3"
+            android:layout_marginRight="10dp"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="QUEST CATAGORY"
-        android:id="@+id/cattextview"
-        android:layout_below="@+id/infoedittext"
-        android:layout_alignLeft="@+id/catspinner"
-        android:layout_alignStart="@+id/catspinner"
-        android:layout_marginLeft="10dp"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="QUEST CATAGORY"
+            android:id="@+id/cattextview"
+            android:layout_below="@+id/infoedittext"
+            android:layout_alignLeft="@+id/catspinner"
+            android:layout_alignStart="@+id/catspinner"
+            android:layout_marginLeft="10dp"
+            />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/catspinner"
-        android:layout_below="@+id/langtextveiw"
-        android:layout_toRightOf="@+id/langspinner" />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/catspinner"
+            android:layout_below="@+id/langtextveiw"
+            android:layout_toRightOf="@+id/langspinner" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="EXPIRY DATE"
-        android:id="@+id/datetextview"
-        android:layout_above="@+id/locationedittext"
-        android:layout_alignLeft="@+id/cattextview"
-        android:layout_alignStart="@+id/cattextview" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="EXPIRY DATE"
+            android:id="@+id/datetextview"
+            android:layout_above="@+id/locationedittext"
+            android:layout_alignLeft="@+id/cattextview"
+            android:layout_alignStart="@+id/cattextview" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dateedittext"
-        android:maxLines="1"
-        android:layout_alignTop="@+id/locationedittext"
-        android:layout_alignLeft="@+id/datetextview"
-        android:layout_alignStart="@+id/datetextview"
-        android:layout_alignRight="@+id/infoedittext"
-        android:layout_alignEnd="@+id/infoedittext"
-        android:editable="false" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateedittext"
+            android:maxLines="1"
+            android:layout_alignTop="@+id/locationedittext"
+            android:layout_alignLeft="@+id/datetextview"
+            android:layout_alignStart="@+id/datetextview"
+            android:layout_alignRight="@+id/infoedittext"
+            android:layout_alignEnd="@+id/infoedittext"
+            android:editable="false" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="REQUIRED LANGUAGE"
-        android:id="@+id/langtextveiw"
-        android:layout_below="@+id/infoedittext"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="REQUIRED LANGUAGE"
+            android:id="@+id/langtextveiw"
+            android:layout_below="@+id/infoedittext"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"/>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/langspinner"
-        android:layout_alignTop="@+id/catspinner"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/langtextveiw"
-        android:layout_alignEnd="@+id/langtextveiw"
-        android:layout_marginLeft="10dp"
-        />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/langspinner"
+            android:layout_alignTop="@+id/catspinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/langtextveiw"
+            android:layout_alignEnd="@+id/langtextveiw"
+            android:layout_marginLeft="10dp"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="LOCATION"
-        android:id="@+id/locationtextview"
-        android:layout_below="@+id/langspinner"
-        android:layout_alignLeft="@+id/langspinner"
-        android:layout_alignStart="@+id/langtextveiw"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="LOCATION"
+            android:id="@+id/locationtextview"
+            android:layout_below="@+id/langspinner"
+            android:layout_alignLeft="@+id/langspinner"
+            android:layout_alignStart="@+id/langtextveiw"
+            />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/locationedittext"
-        android:maxLines="1"
-        android:layout_below="@+id/locationtextview"
-        android:layout_alignLeft="@+id/locationtextview"
-        android:layout_alignStart="@+id/locationtextview"
-        android:layout_alignRight="@+id/langtextveiw"
-        android:layout_alignEnd="@+id/langtextveiw" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationedittext"
+            android:maxLines="1"
+            android:layout_below="@+id/locationtextview"
+            android:layout_alignLeft="@+id/locationtextview"
+            android:layout_alignStart="@+id/locationtextview"
+            android:layout_alignRight="@+id/langtextveiw"
+            android:layout_alignEnd="@+id/langtextveiw" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I AGREE THE TERM OF USE"
-        android:id="@+id/termofusecheckBox"
-        android:checked="false"
-        android:layout_below="@+id/dateedittext"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I AGREE THE TERM OF USE"
+            android:id="@+id/termofusecheckBox"
+            android:checked="false"
+            android:layout_below="@+id/participantsedittext"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/submitbutton"
-        android:layout_below="@+id/termofusecheckBox"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/submitbutton"
+            android:layout_below="@+id/termofusecheckBox"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/participantsedittext"
+            android:maxLines="1"
+            android:layout_below="@+id/textView"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:layout_alignRight="@+id/dateedittext"
+            android:layout_alignEnd="@+id/dateedittext"
+            android:inputType="number" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="NUMBER OF PARTICIPANTS"
+            android:id="@+id/textView"
+            android:numeric="decimal"
+            android:layout_below="@+id/dateedittext"
+            android:layout_alignLeft="@+id/dateedittext"
+            android:layout_alignStart="@+id/dateedittext" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="TIME REQUIRED"
+            android:id="@+id/timetextview"
+            android:editable="false"
+            android:layout_below="@+id/locationedittext"
+            android:layout_alignLeft="@+id/locationedittext"
+            android:layout_alignStart="@+id/locationedittext" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timerequireedhourittext"
+            android:maxLines="1"
+            android:layout_below="@+id/timetextview"
+            android:layout_alignLeft="@+id/timetextview"
+            android:layout_alignStart="@+id/timetextview"
+            android:layout_alignRight="@+id/locationtextview"
+            android:layout_alignEnd="@+id/locationtextview"
+            android:text="HH" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/imageView3"
+            android:layout_below="@+id/termofusecheckBox"
+            android:layout_toLeftOf="@+id/submitbutton"
+            android:layout_alignLeft="@+id/timerequireedhourittext"
+            android:layout_alignStart="@+id/timerequireedhourittext" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timerequiredminuteedittext"
+            android:maxLines="1"
+            android:layout_above="@+id/termofusecheckBox"
+            android:layout_alignRight="@+id/locationedittext"
+            android:layout_alignEnd="@+id/locationedittext"
+            android:layout_toEndOf="@+id/titletextview"
+            android:layout_toRightOf="@+id/titletextview"
+            android:text="MM" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text=":"
+            android:id="@+id/textView2"
+            android:layout_alignTop="@+id/participantsedittext"
+            android:layout_toRightOf="@+id/timerequireedhourittext"
+            android:layout_above="@+id/termofusecheckBox"
+            android:layout_alignRight="@+id/titletextview"
+            android:layout_alignEnd="@+id/titletextview"
+            android:textSize= "24dp"
+            android:textAlignment="center"
+            />
+
+    </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

@@ -1,12 +1,12 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +18,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Altman on 2015/10/30.
  */
-public class QuestListFragment extends Fragment {
+public class fragment_QuestList extends Fragment{
     Context context;
 
     //setup DBHelper
@@ -35,50 +32,41 @@ public class QuestListFragment extends Fragment {
     //Define for list view
     TextView title, expirydate;
     ImageView icon;
-    List<String> titlelist = new ArrayList<>();
-    List<String> expirydatelist = new ArrayList<>();
-    List<String> catagorylist = new ArrayList<>();
-    List<String> infolist = new ArrayList<>();
-    List<String> langlist = new ArrayList<>();
-    List<String> locationlist = new ArrayList<>();
     ListAdapter adapter;
 
     Spinner catagoryspinner, languagespinner;
+
+    PassValue passvalue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_questlistfragment, null);
         context = container.getContext();
         setlist(v);
+        database_loadDatabase.setArrayList(context);
         return v;
     }
 
+    //Interface
+    public interface PassValue
+    {
+        public void setPosition(int position);
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        try{
+            passvalue = (PassValue) activity;
+        }catch(Exception e){
+            Log.d("Unable to pass position", null);
+        }
+
+    }
 
     //Set up list
     public void setlist(View v){
         ListView list = (ListView) v.findViewById(R.id.list);
-
-        helper  = new DBHelper(context, DBHelper.DATABASE_NAME);
-        db = helper.getReadableDatabase();
-        cursor = db.rawQuery("SELECT * FROM " + DBHelper.TABLE_NAME, null);
-
-        titlelist.clear();
-        expirydatelist.clear();
-        infolist.clear();
-        catagorylist.clear();
-        langlist.clear();
-        locationlist.clear();
-
-        while(cursor.moveToNext()){
-            titlelist.add(cursor.getString(cursor.getColumnIndex("quest_title")));
-            expirydatelist.add(cursor.getString(cursor.getColumnIndex("expiry_date")));
-            infolist.add(cursor.getString(cursor.getColumnIndex("quest_info")));
-            catagorylist.add(cursor.getString(cursor.getColumnIndex("catagory")));
-            langlist.add(cursor.getString(cursor.getColumnIndex("required_language")));
-            locationlist.add(cursor.getString(cursor.getColumnIndex("quest_location")));
-        }
-        db.close();
-
 
         catagoryspinner = (Spinner) v.findViewById(R.id.catspinner);
         languagespinner = (Spinner) v.findViewById(R.id.langspinner);
@@ -97,14 +85,10 @@ public class QuestListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity().getBaseContext(), MainActivity.class);
-                intent.putExtra("position", position);
-                getActivity().startActivity(intent);
-                questdetailsfragment fragment1 = new questdetailsfragment();
-                getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
+                passvalue.setPosition(position);
+                Log.d("Position passed", String.valueOf(position));
             }
         });
-
     }
 
     public class ListAdapter extends BaseAdapter {
@@ -116,12 +100,12 @@ public class QuestListFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return titlelist.size();
+            return database_loadDatabase.titlelist.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return titlelist.get(position);
+            return database_loadDatabase.titlelist.get(position);
         }
 
         @Override
@@ -131,19 +115,17 @@ public class QuestListFragment extends Fragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-
             convertView = ListInflater.inflate(R.layout.questitem, null);
 
             title = (TextView)convertView.findViewById(R.id.titletextview);
             expirydate = (TextView)convertView.findViewById(R.id.expirydatetextview);
             icon = (ImageView)convertView.findViewById(R.id.imageView);
 
-            title.setText(titlelist.get(position));
-            expirydate.setText(expirydatelist.get(position));
-            int rand = (int)Math.random();
-            String drawableName = parameter.defaulticonpath[rand];
-            int resID = getResources().getIdentifier(drawableName, "drawable", "com.eeproject.myvolunteer.myvolunteer");
-            icon.setImageResource(resID);
+            title.setText(database_loadDatabase.titlelist.get(position));
+            expirydate.setText(database_loadDatabase.expirydatelist.get(position));
+
+            icon.setImageResource(R.drawable.nomoreyup);
+
 
             return convertView;
         }

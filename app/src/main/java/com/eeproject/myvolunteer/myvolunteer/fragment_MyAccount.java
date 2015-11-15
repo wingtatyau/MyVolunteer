@@ -10,13 +10,12 @@ import android.view.ViewGroup;
 /**
  * Created by Altman on 2015/10/30.
  */
-public class changeMyAccount extends Fragment {
+public class fragment_MyAccount extends Fragment {
     Context context;
-    boolean login = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_questlistfragment, null);
+        View v = inflater.inflate(R.layout.fragment_myaccount, null);
         context = container.getContext();
 
         //Initialize the boolean, if login-ed, changed to true;
@@ -26,7 +25,7 @@ public class changeMyAccount extends Fragment {
     }
 
     public void init(View v) {
-        if(login == false) {
+        if(parameter.login.get() == false) {
             login fragment1 = new login();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.activity_main, null);

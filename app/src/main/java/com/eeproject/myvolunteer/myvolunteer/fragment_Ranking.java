@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 /**
  * Created by Altman on 2015-11-13.
  */
-public class rankingfragment extends Fragment {
+public class fragment_Ranking extends Fragment {
     Context context;
     SQLiteOpenHelper db;
     DBHelper helper;
@@ -21,7 +21,7 @@ public class rankingfragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_addquest, null);
+        View v = inflater.inflate(R.layout.fragment_ranking, null);
         context = container.getContext();
         helper = new DBHelper(context, DBHelper.DATABASE_NAME);
         init(v);

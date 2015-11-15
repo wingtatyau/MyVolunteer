@@ -76,5 +76,15 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="10dp"/>
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember me"
+        android:id="@+id/remembermecheckbox"
+        android:layout_alignTop="@+id/loginbutton"
+        android:layout_alignLeft="@+id/passwordedittext"
+        android:layout_alignStart="@+id/passwordedittext"
+        android:checked="false" />
+
 
 </RelativeLayout>

@@ -1,10 +1,11 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
@@ -16,29 +17,37 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements fragment_QuestList.PassValue {
     //Setup context
     Context context = this;
 
-
+    //Define toolbar
+    Toolbar toolbar;
 
     //DrawerLayout define
     TextView contentView;
     DrawerLayout drawerLayout;
+
+    //setup DBHelper
+    SQLiteDatabase db;
+    public DBHelper helper;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         changeQuestList();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("We are Volunteer!");
         toolbar.setNavigationIcon(R.drawable.nomoregood_small);
+
+        database_loadDatabase.setArrayList(context);
 
         //Get Intent
         Intent intent = getIntent();
         String position = intent.getStringExtra("position");
-
+        
 
         //set up navigation drawer buttons
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -49,12 +58,15 @@ public class MainActivity extends FragmentActivity {
                 String title = (String) menuItem.getTitle();
                 if (title.equals("Add Quest")) {
                     changeaddquest();
+                    toolbar.setTitle("Add Quest!");
                 }
                 if (title.equals("Quest List")) {
                     changeQuestList();
+                    toolbar.setTitle("We are Volunteer!");
                 }
                 if (title.equals("My Account")) {
                     changeMyAccount();
+                    toolbar.setTitle("We are Volunteer!");
                 }
                 if (title.equals("zuyoChat!")) {
                     changezuyoChat();
@@ -64,9 +76,11 @@ public class MainActivity extends FragmentActivity {
                 }
                 if (title.equals("Setting")) {
                     changeSetting();
+                    toolbar.setTitle("Setting");
                 }
                 if (title.equals("Ranking")) {
                     changeRanking();
+                    toolbar.setTitle("Ranking");
                 }
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
@@ -76,13 +90,13 @@ public class MainActivity extends FragmentActivity {
     }
 
 
-
     @Override
     public void onBackPressed(){
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             Log.i("MainActivity", "popping backstack");
             fm.popBackStack();
+
         } else {
             Log.i("MainActivity", "nothing on backstack, calling super");
             super.onBackPressed();
@@ -90,7 +104,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void changeaddquest(){
-        addquestfragment fragment1 = new addquestfragment();
+        fragment_AddQuest fragment1 = new fragment_AddQuest();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 
@@ -105,22 +119,17 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void changeRanking() {
-        rankingfragment fragment1 = new rankingfragment();
+        fragment_Ranking fragment1 = new fragment_Ranking();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
     private void changeMyAccount() {
-        changeMyAccount fragment1 = new changeMyAccount();
+        fragment_MyAccount fragment1 = new fragment_MyAccount();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 
     public void changeQuestList() {
-        QuestListFragment fragment1 = new QuestListFragment();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
-    }
-
-    public void changelogin(){
-        login fragment1 = new login();
+        fragment_QuestList fragment1 = new fragment_QuestList();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 
@@ -128,7 +137,6 @@ public class MainActivity extends FragmentActivity {
     public void onWindowFocusChanged(boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,4 +160,10 @@ public class MainActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void setPosition(int position) {
+        fragment_QuestDetails fragment1 = new fragment_QuestDetails();
+        fragment1.updateInfo(position);
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
+    }
 }

@@ -1,16 +1,16 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ import java.util.Date;
 /**
  * Created by Altman on 2015-11-12.
  */
-public class addquestfragment extends Fragment {
+public class fragment_AddQuest extends Fragment {
     Context context;
 
     //Setup timepicker
@@ -44,9 +45,11 @@ public class addquestfragment extends Fragment {
 
     //Setup float
     Button submit;
-    EditText titleedittext, infoedittext, dateedittext, locationedittext;
+    EditText titleedittext, infoedittext, dateedittext, locationedittext, participantedittext, timerequirehouredittext, timerequireminuteedittext;
     Spinner catagoryspinner, languagespinner;
     CheckBox termofusecheckbox;
+
+    ImageView title;
 
     //setup DBHelper
     SQLiteDatabase db;
@@ -70,15 +73,51 @@ public class addquestfragment extends Fragment {
         infoedittext = (EditText)view.findViewById(R.id.infoedittext);
         dateedittext = (EditText)view.findViewById(R.id.dateedittext);
         locationedittext = (EditText)view.findViewById(R.id.locationedittext);
+        participantedittext = (EditText)view.findViewById(R.id.participantsedittext);
+        timerequirehouredittext = (EditText)view.findViewById(R.id.timerequireedhourittext);
+        timerequireminuteedittext = (EditText)view.findViewById(R.id.timerequiredminuteedittext);
 
-        dateedittext.setOnClickListener(new View.OnClickListener() {
+
+        participantedittext.setRawInputType(Configuration.KEYBOARD_QWERTY);
+        timerequirehouredittext.setRawInputType(Configuration.KEYBOARD_QWERTY);
+        timerequireminuteedittext.setRawInputType(Configuration.KEYBOARD_QWERTY);
+
+        timerequireminuteedittext.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                dateedittext.setText("");
-                builder.setLength(0);
-                datepicker();
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN && timerequireminuteedittext.equals("MM")){
+                    timerequireminuteedittext.setText("");
+                }
+                return false;
             }
         });
+
+        timerequirehouredittext.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN && timerequirehouredittext.equals("HH")) {
+                    timerequirehouredittext.setText("");
+                }
+                return false;
+            }
+        });
+
+        title = (ImageView) view.findViewById(R.id.imageView3);
+        title.setImageResource(R.drawable.providequestlogo);
+
+
+
+        dateedittext.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    builder.setLength(0);
+                    datepicker();
+                }
+                return false;
+            }
+        });
+
 
         catagoryspinner = (Spinner) view.findViewById(R.id.catspinner);
         languagespinner = (Spinner) view.findViewById(R.id.langspinner);
@@ -108,26 +147,28 @@ public class addquestfragment extends Fragment {
                             if (locationedittext.getText().toString().equals("") || locationedittext.getText().toString().equals("Location cannot be null!")) {
                                 sethighlight(locationedittext, "Location");
                             } else {
-                                if (termofusecheckbox.isChecked() == false) {
-                                    Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    db = helper.getWritableDatabase();
+                                if (timerequirehouredittext.getText().toString().equals("") || timerequirehouredittext.getText().toString().equals("Time Required cannot be null!")) {
+                                    sethighlight(timerequirehouredittext, "Time Required");
+                                }else {
+                                    if (participantedittext.getText().toString().equals("") || participantedittext.getText().toString().equals("Number of participants cannot be null!")) {
+                                        sethighlight(participantedittext, "Number of participants");
+                                    } else {
+                                        if (termofusecheckbox.isChecked() == false) {
+                                            Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            //Create object
+                                            quest Quest = new quest(titleedittext.getText().toString(), infoedittext.getText().toString(),
+                                                    dateedittext.getText().toString(), locationedittext.getText().toString(),
+                                                    catagoryspinner.getSelectedItem().toString(), languagespinner.getSelectedItem().toString(),
+                                                    "username", timerequirehouredittext.getText().toString() + ":" + timerequireminuteedittext.getText().toString(), 0, Integer.parseInt(participantedittext.getText().toString()) );
+                                            database_writeDatabase.writeQuest(Quest, context);
+                                            Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
 
-                                    ContentValues cv = new ContentValues();
-
-                                    cv.put(DBHelper.TITLE, titleedittext.getText().toString());
-                                    cv.put(DBHelper.INFO, infoedittext.getText().toString());
-                                    cv.put(DBHelper.EXPIRYDATE, dateedittext.getText().toString());
-                                    cv.put(DBHelper.LOCATION, locationedittext.getText().toString());
-                                    cv.put(DBHelper.CATAGORY, catagoryspinner.getSelectedItem().toString());
-                                    cv.put(DBHelper.REQUIREDLANGUAGE, languagespinner.getSelectedItem().toString());
-                                    cv.put(DBHelper.USER, "username");
-
-                                    db.insert(DBHelper.TABLE_NAME, null, cv);
-                                    db.close();
-                                    Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
-                                    QuestListFragment fragment1 = new QuestListFragment();
-                                    getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+                                            //Return to quest list fragment
+                                            fragment_QuestList fragment1 = new fragment_QuestList();
+                                            getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -155,6 +196,7 @@ public class addquestfragment extends Fragment {
         }, mYear, mMonth, mDate);
         dpd.show();
     }
+
     public void timepicker(){
         TimePickerDialog tpd = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -166,8 +208,7 @@ public class addquestfragment extends Fragment {
                 try {
                     datetime = sdf.parse(timestring);
                     builder.append(sdf.format(datetime).toString());
-                    dateedittext.setText(builder.toString());
-
+                    dateedittext.setText(builder);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -177,6 +218,7 @@ public class addquestfragment extends Fragment {
         }, mHour, mMinute, false);
         tpd.show();
     }
+
     public void sethighlight(EditText v, String type){
         v.setText(type + " cannot be null!");
         v.setTextColor(Color.RED);
