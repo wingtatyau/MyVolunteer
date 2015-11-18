@@ -62,6 +62,12 @@ public class database_writeDatabase {
             cv.put(DBHelper.PASSWORD, user.getPassword());
             cv.put(DBHelper.ICONPATH, user.getIconpath());
             cv.put(DBHelper.RANKING_MARK, user.getRanking_mark());
+            //------------------------ added by Tat --------------------------
+            cv.put(DBHelper.FIRST_NAME, user.getFirstName());
+            cv.put(DBHelper.LAST_NAME, user.getLastName());
+            cv.put(DBHelper.QUEST_ISSUED, user.getQuestIssued());
+            cv.put(DBHelper.QUEST_ACCEPTED, user.getQuestAccepted());
+            //----------------------------------------------------------------
 
             db.insert(DBHelper.USER_TABLE_NAME, null, cv);
             db.close();

@@ -103,7 +103,7 @@ public class fragment_AddQuest extends Fragment {
         });
 
         title = (ImageView) view.findViewById(R.id.imageView3);
-        title.setImageResource(R.drawable.providequestlogo);
+        //title.setImageResource(R.drawable.providequestlogo);
 
 
 

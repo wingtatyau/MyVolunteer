@@ -92,6 +92,8 @@ public class login extends Fragment{
         }
     }
 
+
+
     //Perform the register process
     public void register(String username, String password){
         int rand = (int)(Math.random()*10);
@@ -99,9 +101,14 @@ public class login extends Fragment{
         user createuser = new user(username, password, 0, parameter.defaulticonpath[rand]);
         Log.d("Username: ", createuser.getUsername());
         if(database_writeDatabase.writeUser(createuser, context) == true) {
-            Toast.makeText(context, "Register Succesful!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();
+
+            //Jump to fragment_Register
+            fragment_Register f1 = new fragment_Register();
+            f1.setUser(createuser);
+            getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
         }else{
-            Toast.makeText(context, "Register unuccesful!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
 
         }
     }

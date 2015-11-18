@@ -30,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PARTI_NUMBER = "parti_number";
 
 
+
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TITLE + " TEXT NOT NULL, " +
@@ -48,11 +49,23 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PASSWORD = "password";
     public static final String ICONPATH = "icon_path";
     public static final String RANKING_MARK = "ranking_mark";
+    //------------------added by Tat-----------------------------
+    public static final String FIRST_NAME = "first_name";
+    public static final String LAST_NAME = "last_name";
+    public static final String QUEST_ISSUED = "quest_issued";
+    public static final String QUEST_ACCEPTED = "quest_accepted";
+    //-----------------------------------------------------------
 
     public static final String USER_CREATE_TABLE =
             "CREATE TABLE "+USER_TABLE_NAME+"("+KEY_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
                     USER + " TEXT NOT NULL," +
                     PASSWORD + " TEXT NOT NULL," +
+                    //---------- added by Tat ----------
+                    FIRST_NAME + "TEXT NOT NULL" +
+                    LAST_NAME + "TEXT NOT NULL" +
+                    QUEST_ISSUED + "INTERGER NOT NULL, " +
+                    QUEST_ACCEPTED + "INTERGER NOT NULL, " +
+                    //-----------------------------------
                     RANKING_MARK + " INTEGER NOT NULL, " +
                     ICONPATH + " TEXT NOT NULL)";
 
