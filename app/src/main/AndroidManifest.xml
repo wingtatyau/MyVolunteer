@@ -57,6 +57,10 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+        <activity
+            android:name="com.example.facedemo.facedemo.ChatActivity"
+            android:label="聊天窗口">
+        </activity>
         <!-- END Parse.com requirements -->
     </application>
 

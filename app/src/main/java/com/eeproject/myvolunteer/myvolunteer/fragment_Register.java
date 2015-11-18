@@ -57,8 +57,8 @@ public class fragment_Register extends Fragment{
 
     //Perform the finish process
     public void finish(String First, String Last){
-        user.setFirstName(First);
-        user.setLastName(Last);
+        //user.setFirstName(First);
+        //user.setLastName(Last);
 
         if(database_writeDatabase.writeUser(user, context) == true) {
             Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();

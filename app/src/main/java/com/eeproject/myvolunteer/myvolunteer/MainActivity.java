@@ -1,6 +1,7 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
@@ -14,10 +15,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.example.facedemo.facedemo.ChatActivity;
+import com.example.facedemo.facedemo.FaceConversionUtil;
 
-public class MainActivity extends FragmentActivity implements fragment_QuestList.PassValue {
+
+public class MainActivity extends Activity implements fragment_QuestList.PassValue {
     //Setup context
     Context context = this;
 
@@ -36,7 +41,15 @@ public class MainActivity extends FragmentActivity implements fragment_QuestList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_main);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FaceConversionUtil.getInstace().getFileText(getApplication());
+            }
+        }).start();
         changeQuestList();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("We are Volunteer!");
@@ -70,6 +83,7 @@ public class MainActivity extends FragmentActivity implements fragment_QuestList
                 }
                 if (title.equals("zuyoChat!")) {
                     changezuyoChat();
+                    toolbar.setTitle("zuyoChat");
                 }
                 if (title.equals("Share")) {
                     changeShare();
@@ -105,9 +119,8 @@ public class MainActivity extends FragmentActivity implements fragment_QuestList
 
     private void changeaddquest(){
         fragment_AddQuest fragment1 = new fragment_AddQuest();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
-
     private void changeSetting(){
     }
 
@@ -115,7 +128,8 @@ public class MainActivity extends FragmentActivity implements fragment_QuestList
     }
 
     private void changezuyoChat() {
-
+        ChatActivity fragment1 = new ChatActivity();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
     private void changeRanking() {
@@ -153,8 +167,10 @@ public class MainActivity extends FragmentActivity implements fragment_QuestList
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.zuyoChat) {
+            Intent it=new Intent();
+            it.setClass(MainActivity.this, ChatActivity.class);
+            startActivity(it);
         }
 
         return super.onOptionsItemSelected(item);

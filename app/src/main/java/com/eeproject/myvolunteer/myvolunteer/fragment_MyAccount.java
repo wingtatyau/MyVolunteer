@@ -6,19 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 /**
  * Created by Altman on 2015/10/30.
  */
 public class fragment_MyAccount extends Fragment {
     Context context;
-
-    ImageView icon;
-    TextView name, organization, contacttextview, contactleft, situationright, questissuetextview, issueleft,
-            detailsright, questaccepttextview, location, acceptright;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,20 +32,6 @@ public class fragment_MyAccount extends Fragment {
             getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
         }else{
             //perform displaying actions
-
-            icon = (ImageView) v.findViewById(R.id.icon);
-            name = (TextView) v.findViewById(R.id.name);
-            organization = (TextView) v.findViewById(R.id.organization);
-            contacttextview = (TextView) v.findViewById(R.id.contacttextview);
-            contactleft = (TextView) v.findViewById(R.id.contactleft);
-            situationright = (TextView) v.findViewById(R.id.situationleft);
-            questissuetextview = (TextView) v.findViewById(R.id.questissuetextview);
-            issueleft = (TextView) v.findViewById(R.id.issueleft);
-            detailsright = (TextView) v.findViewById(R.id.detailsright);
-            questaccepttextview = (TextView) v.findViewById(R.id.questaccepttextview);
-            location = (TextView) v.findViewById(R.id.location);
-            acceptright = (TextView) v.findViewById(R.id.acceptright);
-
         }
     }
 
@@ -60,19 +39,6 @@ public class fragment_MyAccount extends Fragment {
     //User database is not yet built
 
     public void getinformation(){
-
-        name.setText("");
-        organization.setText("");
-        contacttextview.setText("Contact");
-        contactleft.setText("");
-        situationright.setText("");
-        questaccepttextview.setText("");
-        issueleft.setText("");
-        detailsright.setText("");
-        questaccepttextview.setText("");
-        location.setText("");
-        acceptright.setText("");
-
 
     }
 

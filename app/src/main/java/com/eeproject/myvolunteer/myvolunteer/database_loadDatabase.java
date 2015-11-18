@@ -33,12 +33,6 @@ public class database_loadDatabase {
     public static List<String> passwordlist = new ArrayList<>();
     public static List<String> ranking_mark = new ArrayList<>();
     public static List<String> iconpathlist = new ArrayList<>();
-    //------------------------ added by Tat --------------------------
-    public static List<String> firstnamelist = new ArrayList<>();
-    public static List<String> lastnamelist = new ArrayList<>();
-    public static List<String> questissuedlist = new ArrayList<>();
-    public static List<String> questacceptedlist = new ArrayList<>();
-    //----------------------------------------------------------------
 
 
     public static void setArrayList(Context context){
