@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Altman on 2015/11/5.
@@ -47,7 +48,8 @@ public class fragment_QuestDetails extends Fragment {
         situaitonright = (TextView) v.findViewById(R.id.situationright);
         situationleft = (TextView) v.findViewById(R.id.situationleft);
         detailsleft = (TextView) v.findViewById(R.id.detailsleft);
-        detailsright = (TextView) v.findViewById(R.id.detailsright);
+        //commented by Tat
+        //detailsright = (TextView) v.findViewById(R.id.detailsright);
         location = (TextView) v.findViewById(R.id.location);
         contact = (TextView) v.findViewById(R.id.contact);
         accept = (Button) v.findViewById(R.id.acceptbutton);
@@ -59,7 +61,10 @@ public class fragment_QuestDetails extends Fragment {
             @Override
             public void onClick(View v) {
                 //log to database
-
+                database_writeDatabase.updatetable(context, DBHelper.TABLE_NAME, DBHelper.QUEST_CURRENT_PARTI, position+1, (database_loadDatabase.questcurrentpartilist.get(position)+1));
+                database_loadDatabase.setArrayList(context);
+                getinformation();
+                Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
             }
         });
         getinformation();

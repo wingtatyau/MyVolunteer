@@ -77,9 +77,26 @@ public class login extends Fragment{
                     TextView displayusername = (TextView)drawer.findViewById(R.id.name);
                     displayusername.setText(username);
 
+                    int ranking_mark = Integer.parseInt(database_loadDatabase.ranking_mark.get(i));
+                    String iconpath = database_loadDatabase.iconpathlist.get(i);
+                    String firstName = database_loadDatabase.firstnamelist.get(i);
+                    String lastName = database_loadDatabase.lastnamelist.get(i);
+                    String organization = database_loadDatabase.organizationlist.get(i);
+                    String questIssuedList = database_loadDatabase.questIssuedList.get(i);
+                    String questAcceptedList = database_loadDatabase.questAcceptedList.get(i);
+                    user createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
+
+                    TextView title = (TextView) drawer.findViewById(R.id.name);
+                    title.setText(createuser.getUsername());
+                    parameter.setUserID(createuser.getUsername());
+
                     //Jump to fragment_MyAccount
                     fragment_MyAccount f1 = new fragment_MyAccount();
+                    parameter.logineduser = createuser;
+                    f1.setUser(createuser);
                     getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
+
+
                 }
             }
         }
@@ -96,12 +113,23 @@ public class login extends Fragment{
     public void register(String username, String password){
         int rand = (int)(Math.random()*10);
         Log.d("Math random: ", String.valueOf(rand));
-        user createuser = new user(username, password, 0, parameter.defaulticonpath[rand]);
+        boolean exist = false;
+        for(int i = 0; i < database_loadDatabase.usernamelist.size(); i++){
+            if(username.equals(database_loadDatabase.usernamelist.get(i))) {
+                exist = true;
+            }
+        }
+        user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", "No Quest Issued yet", "No Quest Accepted yet");
         Log.d("Username: ", createuser.getUsername());
-        if(database_writeDatabase.writeUser(createuser, context) == true) {
-            Toast.makeText(context, "Register Succesful!", Toast.LENGTH_LONG).show();
+        if(exist != true) {
+            Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();
+            Log.d("Username11221: ", createuser.getUsername());
+            //Jump to fragment_Register
+            fragment_Register f1 = new fragment_Register();
+            f1.setUser(createuser);
+            getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
         }else{
-            Toast.makeText(context, "Register unuccesful!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
 
         }
     }

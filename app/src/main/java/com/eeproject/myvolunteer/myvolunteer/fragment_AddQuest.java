@@ -85,7 +85,7 @@ public class fragment_AddQuest extends Fragment {
         timerequireminuteedittext.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN && timerequireminuteedittext.equals("MM")){
+                if (event.getAction() == MotionEvent.ACTION_DOWN && timerequireminuteedittext.getText().toString().equals("MM")) {
                     timerequireminuteedittext.setText("");
                 }
                 return false;
@@ -95,7 +95,7 @@ public class fragment_AddQuest extends Fragment {
         timerequirehouredittext.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN && timerequirehouredittext.equals("HH")) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN && timerequirehouredittext.getText().toString().equals("HH")) {
                     timerequirehouredittext.setText("");
                 }
                 return false;
@@ -103,9 +103,7 @@ public class fragment_AddQuest extends Fragment {
         });
 
         title = (ImageView) view.findViewById(R.id.imageView3);
-//        title.setImageResource(R.drawable.providequestlogo);
-
-
+        title.setImageResource(R.drawable.providequestlogo);
 
         dateedittext.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -156,17 +154,20 @@ public class fragment_AddQuest extends Fragment {
                                         if (termofusecheckbox.isChecked() == false) {
                                             Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
                                         } else {
-                                            //Create object
+                                                //Create object
                                             quest Quest = new quest(titleedittext.getText().toString(), infoedittext.getText().toString(),
-                                                    dateedittext.getText().toString(), locationedittext.getText().toString(),
-                                                    catagoryspinner.getSelectedItem().toString(), languagespinner.getSelectedItem().toString(),
-                                                    "username", timerequirehouredittext.getText().toString() + ":" + timerequireminuteedittext.getText().toString(), 0, Integer.parseInt(participantedittext.getText().toString()) );
+                                                        dateedittext.getText().toString(), locationedittext.getText().toString(),
+                                                        catagoryspinner.getSelectedItem().toString(), languagespinner.getSelectedItem().toString(),
+                                                        parameter.logineduser.getFirstname() + " " + parameter.logineduser.getLastname(),
+                                                        timerequirehouredittext.getText().toString() + ":" + timerequireminuteedittext.getText().toString(),
+                                                        0, Integer.parseInt(participantedittext.getText().toString()));
                                             database_writeDatabase.writeQuest(Quest, context);
                                             Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
 
                                             //Return to quest list fragment
                                             fragment_QuestList fragment1 = new fragment_QuestList();
                                             getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+
                                         }
                                     }
                                 }
@@ -220,8 +221,8 @@ public class fragment_AddQuest extends Fragment {
     }
 
     public void sethighlight(EditText v, String type){
-        v.setText(type + " cannot be null!");
-        v.setTextColor(Color.RED);
+        v.setHint(type + " cannot be null!");
+        v.setHintTextColor(Color.GRAY);
     }
 
 }

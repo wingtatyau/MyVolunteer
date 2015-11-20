@@ -17,17 +17,31 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String KEY_ID = "_id";
 
+    //Define table for quest list
     public static final String TITLE = "quest_title";
     public static final String INFO = "quest_info";
     public static final String CATAGORY = "catagory";
     public static final String EXPIRYDATE = "expiry_date";
     public static final String REQUIREDLANGUAGE = "required_language";
     public static final String LOCATION = "quest_location";
-    public static final String TERM_OF_USE = "term_of_use";
     public static final String USER = "user";
     public static final String QUEST_CURRENT_PARTI = "quest_current_parti";
     public static final String QUEST_REQUIRED_TIME = "quest_required_time";
     public static final String PARTI_NUMBER = "parti_number";
+    public static final String USER_ID = "user_id";
+
+    //Define table for storing user login information
+    public static final String USER_TABLE_NAME = "users";
+    public static final String PASSWORD = "password";
+    public static final String ICONPATH = "icon_path";
+    public static final String RANKING_MARK = "ranking_mark";
+    //--------------------- added by Tat -----------------------
+    public static final String FIRSTNAME = "firstname";
+    public static final String LASTNAME = "lastname";
+    public static final String ORGANIZATION = "organization";
+    public static final String QUEST_ISSUED = "quest_issued";
+    public static final String QUEST_ACCEPTED = "quest_accepted";
+    //----------------------------------------------------------
 
 
     public static final String CREATE_TABLE =
@@ -41,19 +55,23 @@ public class DBHelper extends SQLiteOpenHelper {
                     QUEST_CURRENT_PARTI + " INTEGER NOT NULL, " +
                     QUEST_REQUIRED_TIME + " TEXT NOT NULL, " +
                     PARTI_NUMBER + " TEXT NOT NULL, " +
+                    USER_ID + " INTEGER NOT NULL" +
+                    ICONPATH + " TEXT NOT NULL" +
                     LOCATION + " TEXT NOT NULL)";
 
-    //Define table for storing user login information
-    public static final String USER_TABLE_NAME = "users";
-    public static final String PASSWORD = "password";
-    public static final String ICONPATH = "icon_path";
-    public static final String RANKING_MARK = "ranking_mark";
 
     public static final String USER_CREATE_TABLE =
             "CREATE TABLE "+USER_TABLE_NAME+"("+KEY_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
                     USER + " TEXT NOT NULL," +
                     PASSWORD + " TEXT NOT NULL," +
                     RANKING_MARK + " INTEGER NOT NULL, " +
+                    //--------- added by Tat -------------
+                    FIRSTNAME + " TEXT NOT NULL," +
+                    LASTNAME + " TEXT NOT NULL," +
+                    ORGANIZATION + " TEXT NOT NULL," +
+                    QUEST_ISSUED + " TEXT NOT NULL," +
+                    QUEST_ACCEPTED + " TEXT NOT NULL," +
+                    //-------------------------------------
                     ICONPATH + " TEXT NOT NULL)";
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){

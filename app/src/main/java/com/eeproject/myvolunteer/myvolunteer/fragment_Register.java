@@ -23,10 +23,14 @@ import android.widget.Toast;
 public class fragment_Register extends Fragment{
     Context context;
 
-    EditText firstName, lastName;
+    EditText firstName, lastName, organization;
     Button finish;
 
     public static user user;
+
+    public void setUser(user user){
+        this.user = user;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,34 +41,33 @@ public class fragment_Register extends Fragment{
     }
 
     public void init(View v){
-        ImageView image = (ImageView)v.findViewById(R.id.imageView2);
+        ImageView image = (ImageView)v.findViewById(R.id.imageView);
         image.setImageResource(R.drawable.loginlogo);
         firstName = (EditText) v.findViewById(R.id.firstNameEditText);
         lastName = (EditText) v.findViewById(R.id.lastNameEditText);
+        organization = (EditText) v.findViewById(R.id.organizationEditText);
         finish = (Button) v.findViewById(R.id.finishButton);
 
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(firstName.getText().toString(), lastName.getText().toString());
+                finish(firstName.getText().toString(), lastName.getText().toString(), organization.getText().toString());
             }
         });
     }
 
-    public void setUser(user user){
-        this.user = user;
-    }
-
     //Perform the finish process
-    public void finish(String First, String Last){
-        //user.setFirstName(First);
-        //user.setLastName(Last);
+    public void finish(String First, String Last, String Organization){
+        user.setFirstname(First);
+        user.setLastname(Last);
+        user.setOrganization(Organization);
 
         if(database_writeDatabase.writeUser(user, context) == true) {
             Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();
 
             //Jump to fragment_MyAccount
             fragment_MyAccount f1 = new fragment_MyAccount();
+            f1.setUser(user);
             getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
         }else{
             Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();

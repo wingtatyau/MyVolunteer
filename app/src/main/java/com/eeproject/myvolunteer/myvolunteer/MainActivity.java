@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.facedemo.facedemo.ChatActivity;
 import com.example.facedemo.facedemo.FaceConversionUtil;
@@ -118,8 +119,15 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
     }
 
     private void changeaddquest(){
-        fragment_AddQuest fragment1 = new fragment_AddQuest();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+        if(parameter.login.get() == false){
+            Toast.makeText(context, "Please Login!", Toast.LENGTH_LONG).show();
+            login f1 = new login();
+            getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
+
+        }else {
+            fragment_AddQuest fragment1 = new fragment_AddQuest();
+            getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+        }
     }
     private void changeSetting(){
     }
@@ -139,6 +147,7 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
 
     private void changeMyAccount() {
         fragment_MyAccount fragment1 = new fragment_MyAccount();
+        fragment1.setUser(parameter.logineduser);
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 

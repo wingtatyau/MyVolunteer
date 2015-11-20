@@ -65,13 +65,34 @@
                 android:ems="10"
                 android:inputType="text" />
 
+            <TextView
+                android:id="@+id/organization"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/lastNameEditText"
+                android:layout_alignStart="@id/lastNameEditText"
+                android:layout_below="@id/lastNameEditText"
+                android:text="Organization"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/organizationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/organization"
+                android:layout_alignStart="@id/organization"
+                android:layout_below="@id/organization"
+                android:layout_marginRight="10dp"
+                android:ems="10"
+                android:inputType="text" />
+
             <Button
                 android:id="@+id/finishButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/lastNameEditText"
+                android:layout_below="@id/organizationEditText"
                 android:layout_gravity="right"
                 android:layout_marginRight="10dp"
                 android:text="Finish" />

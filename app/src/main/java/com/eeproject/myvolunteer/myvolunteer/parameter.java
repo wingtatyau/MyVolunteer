@@ -14,4 +14,14 @@ public class parameter {
                                     "nomoreflowerface", "nomorefrown", "nomoregood", "nomorequestion", "nomorewtf", "nomoreyup"};
     public static AtomicBoolean login = new AtomicBoolean(false);
     public static AtomicBoolean remeberme = new AtomicBoolean(false);
+    public static user logineduser = new user("Guest", null, 0, "nomorequestion", "Guest", null, null, null, null);
+    public static int userID;
+
+    public static void setUserID(String user){
+        for(int i = 0; i < database_loadDatabase.usernamelist.size(); i++) {
+            if (database_loadDatabase.usernamelist.get(i).equals(user)) {
+                userID = i;
+            }
+        }
+    }
 }
