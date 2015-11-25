@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/situationleft"
-                android:text = "template"
+                android:text = "Current Participants"
                 android:textSize="16dp"
                 android:textColor="#000000"
                 android:layout_below="@+id/view"
@@ -71,8 +71,11 @@
                 android:textSize="16dp"
                 android:textColor="#000000"
                 android:layout_below="@+id/view"
-                android:layout_alignRight="@+id/view"
-                android:layout_alignEnd="@+id/view" />
+                android:layout_alignLeft="@+id/actualduration"
+                android:layout_alignStart="@+id/actualduration"
+                android:gravity="right"
+                android:layout_alignRight="@+id/actualduration"
+                android:layout_alignEnd="@+id/actualduration" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,7 +83,7 @@
                 android:id = "@+id/questissuetextview"
                 android:text = "QUEST DETAIL"
                 android:textSize="16dp"
-                android:layout_below="@+id/actualduration"
+                android:layout_below="@+id/textView3"
                 android:layout_alignLeft="@+id/view2"
                 android:layout_alignStart="@+id/view2" />
 
@@ -179,7 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/durationtextview"
-                android:text="template"
+                android:text="Duration"
                 android:textSize="16dp"
                 android:textColor="#000000"
                 android:layout_below="@+id/situationleft"
@@ -194,8 +197,61 @@
                 android:textSize="16dp"
                 android:textColor="#000000"
                 android:layout_below="@+id/situationright"
-                android:layout_alignLeft="@+id/situationright"
-                android:layout_alignStart="@+id/situationright" />
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"
+                android:gravity="right"
+                android:layout_toEndOf="@+id/icon"
+                android:layout_toRightOf="@+id/icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/Category"
+                android:text="Category"
+                android:textSize="16dp"
+                android:textColor="#000000"
+                android:layout_below="@+id/durationtextview"
+                android:layout_alignLeft="@+id/questissuetextview"
+                android:layout_alignStart="@+id/questissuetextview" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/catatextview"
+                android:text="template"
+                android:textSize="16dp"
+                android:textColor="#000000"
+                android:layout_below="@+id/actualduration"
+                android:gravity="right"
+                android:layout_alignRight="@+id/actualduration"
+                android:layout_alignEnd="@+id/actualduration"
+                android:layout_toEndOf="@+id/icon"
+                android:layout_toRightOf="@+id/icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:text="Required Language"
+                android:textSize="16dp"
+                android:textColor="#000000"
+                android:layout_below="@+id/Category"
+                android:layout_alignLeft="@+id/questissuetextview"
+                android:layout_alignStart="@+id/questissuetextview" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/languagetextview"
+                android:text="template"
+                android:textSize="16dp"
+                android:textColor="#000000"
+                android:gravity="right"
+                android:layout_alignTop="@+id/textView3"
+                android:layout_alignLeft="@+id/questissuetextview"
+                android:layout_alignStart="@+id/questissuetextview"
+                android:layout_alignRight="@+id/catatextview"
+                android:layout_alignEnd="@+id/catatextview" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

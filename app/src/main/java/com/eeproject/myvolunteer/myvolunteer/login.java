@@ -29,16 +29,14 @@ public class login extends Fragment{
     Button submit, register;
     CheckBox rememberme;
 
-    SQLiteDatabase db;
-    DBHelper helper;
-    Cursor cursor;
+    LayoutInflater infalter;
 
     View drawer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.login, null);
-        drawer = inflater.inflate(R.layout.drawer_header, null);
+        this.infalter = inflater;
         context = container.getContext();
         init(v);
         return v;
@@ -86,6 +84,7 @@ public class login extends Fragment{
             if(username.equals(database_loadDatabase.usernamelist.get(i))){
                 if(password.equals(database_loadDatabase.passwordlist.get(i))){
                     parameter.login.set(true);
+                    drawer = infalter.inflate(R.layout.drawer_header, null);
                     Toast.makeText(context, "You login-ed! Welcome!", Toast.LENGTH_SHORT).show();
                     TextView displayusername = (TextView)drawer.findViewById(R.id.name);
                     displayusername.setText(username);

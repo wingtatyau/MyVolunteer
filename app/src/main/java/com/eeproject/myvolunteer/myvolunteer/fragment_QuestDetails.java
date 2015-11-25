@@ -26,7 +26,7 @@ public class fragment_QuestDetails extends Fragment {
     Cursor cursor;
 
     //Setup parameter for calling the elements
-    TextView name, expirydate, situaitonright, situationleft, detailsleft, detailsright, location, contact, durationtextview, actualduration;
+    TextView name, expirydate, situaitonright, situationleft, detailsleft, catagorytextview, languagetextview, location, contact, durationtextview, actualduration;
     Button accept;
     ImageView icon;
 
@@ -56,6 +56,9 @@ public class fragment_QuestDetails extends Fragment {
         location = (TextView) v.findViewById(R.id.location);
         contact = (TextView) v.findViewById(R.id.contact);
         accept = (Button) v.findViewById(R.id.acceptbutton);
+
+        catagorytextview = (TextView) v.findViewById(R.id.catatextview);
+        languagetextview = (TextView) v.findViewById(R.id.languagetextview);
 
         durationtextview = (TextView) v.findViewById(R.id.durationtextview);
         actualduration = (TextView) v.findViewById(R.id.actualduration);
@@ -93,7 +96,8 @@ public class fragment_QuestDetails extends Fragment {
 
         location.setText(database_loadDatabase.locationlist.get(position));
         contact.setText(database_loadDatabase.questuserlist.get(position));
-
+        catagorytextview.setText(database_loadDatabase.catagorylist.get(position));
+        languagetextview.setText(database_loadDatabase.langlist.get(position));
         durationtextview.setText("Duration");
         actualduration.setText(database_loadDatabase.requiredtime.get(position));
 
