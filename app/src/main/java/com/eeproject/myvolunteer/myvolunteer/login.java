@@ -29,14 +29,16 @@ public class login extends Fragment{
     Button submit, register;
     CheckBox rememberme;
 
-    LayoutInflater infalter;
+    SQLiteDatabase db;
+    DBHelper helper;
+    Cursor cursor;
 
     View drawer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.login, null);
-        this.infalter = inflater;
+        drawer = inflater.inflate(R.layout.drawer_header, null);
         context = container.getContext();
         init(v);
         return v;
@@ -84,7 +86,6 @@ public class login extends Fragment{
             if(username.equals(database_loadDatabase.usernamelist.get(i))){
                 if(password.equals(database_loadDatabase.passwordlist.get(i))){
                     parameter.login.set(true);
-                    drawer = infalter.inflate(R.layout.drawer_header, null);
                     Toast.makeText(context, "You login-ed! Welcome!", Toast.LENGTH_SHORT).show();
                     TextView displayusername = (TextView)drawer.findViewById(R.id.name);
                     displayusername.setText(username);
@@ -129,9 +130,62 @@ public class login extends Fragment{
                 exist = true;
             }
         }
-        user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", "No Quest Issued yet", "No Quest Accepted yet");
-        Log.d("Username: ", createuser.getUsername());
-        if(exist != true) {
+        boolean validEmail = true;
+        int num_of_at = 0;
+        int index_of_at = 1;
+        for(int i=0; i < username.length(); i++){
+
+            if (!((username.charAt(i)>=65 && username.charAt(i)<=90) ||
+                    (username.charAt(i)>=97 && username.charAt(i)<=122) ||
+                    (username.charAt(i)>=48 && username.charAt(i)<=57) ||
+                    (username.charAt(i)>=35 && username.charAt(i)<=39) ||
+                    username.charAt(i)==33 || username.charAt(i)==42 ||
+                    username.charAt(i)==43 || username.charAt(i)==45 ||
+                    username.charAt(i)==47 || username.charAt(i)==61 ||
+                    username.charAt(i)==63 || username.charAt(i)==46 ||
+                    (username.charAt(i)>=94 && username.charAt(i)<=96) ||
+                    (username.charAt(i)>=123 && username.charAt(i)<=126) ||
+                    username.charAt(i)=='@'))
+                validEmail = false;
+
+            switch(username.charAt(i)){
+                case 0:
+            }
+
+            if(username.charAt(i) == '@') {
+                num_of_at++;
+                index_of_at = i;
+            }
+        }
+
+        if(username.charAt(0) == '.' || username.charAt(index_of_at-1) == '.')
+            validEmail = false;
+
+        for(int i=0; i < index_of_at-1; i++){
+            if(username.charAt(i) == '.' && username.charAt(i+1) == '.') {
+                validEmail = false;
+            }
+        }
+
+        int number_of_dot = 0;
+        for(int i=index_of_at+1; i < username.length(); i++){
+            if(username.charAt(i) == '.') {
+                number_of_dot++;
+                if(i==username.length()-1)
+                    validEmail = false;
+            }
+        }
+
+        if(num_of_at != 1)
+            validEmail = false;
+
+        if (number_of_dot<1)
+            validEmail = false;
+
+
+        if(exist != true && validEmail) {
+            user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", "No Quest Issued yet", "No Quest Accepted yet");
+            Log.d("Username: ", createuser.getUsername());
             Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();
             Log.d("Username11221: ", createuser.getUsername());
             //Jump to fragment_Register
