@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,13 +56,25 @@ public class login extends Fragment{
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login(username.getText().toString(), password.getText().toString());
+                if(username.getText().toString().equals("")){
+                    sethighlight(username, "Username");
+                }else if(password.getText().toString().equals("")){
+                    sethighlight(password, "Password");
+                }else{
+                    login(username.getText().toString(), password.getText().toString());
+                }
             }
         });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                register(username.getText().toString(), password.getText().toString());
+                if(username.getText().toString().equals("")){
+                    sethighlight(username, "Username");
+                }else if(password.getText().toString().equals("")){
+                    sethighlight(password, "Password");
+                }else{
+                    register(username.getText().toString(), password.getText().toString());
+                }
             }
         });
     }
@@ -95,8 +108,6 @@ public class login extends Fragment{
                     parameter.logineduser = createuser;
                     f1.setUser(createuser);
                     getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
-
-
                 }
             }
         }
@@ -132,5 +143,10 @@ public class login extends Fragment{
             Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    public void sethighlight(EditText v, String type){
+        v.setHint(type + " cannot be empty!");
+        v.setHintTextColor(Color.GRAY);
     }
 }

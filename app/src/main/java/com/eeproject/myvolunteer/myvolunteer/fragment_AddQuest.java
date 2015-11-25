@@ -139,35 +139,39 @@ public class fragment_AddQuest extends Fragment {
                     if (infoedittext.getText().toString().equals("") || infoedittext.getText().toString().equals("Information cannot be null!")) {
                         sethighlight(infoedittext, "Information");
                     } else {
-                        if (dateedittext.getText().toString().equals("") || dateedittext.getText().toString().equals("Date cannot be null!")) {
-                            sethighlight(dateedittext, "Date");
+                        if (locationedittext.getText().toString().equals("") || locationedittext.getText().toString().equals("Location cannot be null!") ){
+                            sethighlight(locationedittext, "Location");
                         } else {
-                            if (locationedittext.getText().toString().equals("") || locationedittext.getText().toString().equals("Location cannot be null!")) {
-                                sethighlight(locationedittext, "Location");
+                            if (dateedittext.getText().toString().equals("") || locationedittext.getText().toString().equals("Location cannot be null!")) {
+                                sethighlight(dateedittext, "Date");
                             } else {
                                 if (timerequirehouredittext.getText().toString().equals("") || timerequirehouredittext.getText().toString().equals("Time Required cannot be null!")) {
-                                    sethighlight(timerequirehouredittext, "Time Required");
+                                    sethighlight(timerequirehouredittext, "Hour");
                                 }else {
-                                    if (participantedittext.getText().toString().equals("") || participantedittext.getText().toString().equals("Number of participants cannot be null!")) {
-                                        sethighlight(participantedittext, "Number of participants");
-                                    } else {
-                                        if (termofusecheckbox.isChecked() == false) {
-                                            Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
+                                    if(timerequireminuteedittext.getText().toString().equals("")){
+                                        sethighlight(timerequireminuteedittext, "Minute");
+                                    }else {
+                                        if (participantedittext.getText().toString().equals("") || participantedittext.getText().toString().equals("Number of participants cannot be null!")) {
+                                            sethighlight(participantedittext, "Number of participants");
                                         } else {
+                                            if (termofusecheckbox.isChecked() == false) {
+                                                Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
+                                            } else {
                                                 //Create object
-                                            quest Quest = new quest(titleedittext.getText().toString(), infoedittext.getText().toString(),
+                                                quest Quest = new quest(titleedittext.getText().toString(), infoedittext.getText().toString(),
                                                         dateedittext.getText().toString(), locationedittext.getText().toString(),
                                                         catagoryspinner.getSelectedItem().toString(), languagespinner.getSelectedItem().toString(),
                                                         parameter.logineduser.getFirstname() + " " + parameter.logineduser.getLastname(),
                                                         timerequirehouredittext.getText().toString() + ":" + timerequireminuteedittext.getText().toString(),
                                                         0, Integer.parseInt(participantedittext.getText().toString()));
-                                            database_writeDatabase.writeQuest(Quest, context);
-                                            Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
+                                                database_writeDatabase.writeQuest(Quest, context);
+                                                Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
 
-                                            //Return to quest list fragment
-                                            fragment_QuestList fragment1 = new fragment_QuestList();
-                                            getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+                                                //Return to quest list fragment
+                                                fragment_QuestList fragment1 = new fragment_QuestList();
+                                                getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
 
+                                            }
                                         }
                                     }
                                 }

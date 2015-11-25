@@ -26,7 +26,7 @@ public class database_loadDatabase {
     public static List<Integer> questcurrentpartilist = new ArrayList<>();
     public static List<Integer> partinumberlist = new ArrayList<>();
     public static List<String> requiredtime = new ArrayList<>();
-    public static List<Integer> questtablekeyid = new ArrayList<>();
+    public static List<String> icon = new ArrayList<>();
 
     //ArrayList for storing user login information
     public static List<String> usernamelist = new ArrayList<>();
@@ -39,7 +39,7 @@ public class database_loadDatabase {
     public static List<String> organizationlist = new ArrayList<>();
     public static List<String> questIssuedList = new ArrayList<>();
     public static List<String> questAcceptedList = new ArrayList<>();
-    public static List<Integer> usertablekeyid = new ArrayList<>();
+    public static List<String> usertablekeyid = new ArrayList<>();
     //-------------------------------------------------------------------
 
 
@@ -59,6 +59,7 @@ public class database_loadDatabase {
         questcurrentpartilist.clear();
         partinumberlist.clear();
         requiredtime.clear();
+        icon.clear();
 
 
         while(cursor.moveToNext()){
@@ -72,6 +73,7 @@ public class database_loadDatabase {
             questcurrentpartilist.add(cursor.getInt(cursor.getColumnIndex(DBHelper.QUEST_CURRENT_PARTI)));
             partinumberlist.add(cursor.getInt(cursor.getColumnIndex(DBHelper.PARTI_NUMBER)));
             requiredtime.add(cursor.getString(cursor.getColumnIndex(DBHelper.QUEST_REQUIRED_TIME)));
+            icon.add(cursor.getString(cursor.getColumnIndex(DBHelper.ICONPATH)));
         }
 
 

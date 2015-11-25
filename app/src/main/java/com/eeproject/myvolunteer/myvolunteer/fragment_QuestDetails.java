@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class fragment_QuestDetails extends Fragment {
     //Setup parameter for calling the elements
     TextView name, expirydate, situaitonright, situationleft, detailsleft, detailsright, location, contact, durationtextview, actualduration;
     Button accept;
+    ImageView icon;
 
     //position value
     int position;
@@ -48,6 +50,7 @@ public class fragment_QuestDetails extends Fragment {
         situaitonright = (TextView) v.findViewById(R.id.situationright);
         situationleft = (TextView) v.findViewById(R.id.situationleft);
         detailsleft = (TextView) v.findViewById(R.id.detailsleft);
+        icon = (ImageView) v.findViewById(R.id.icon);
         //commented by Tat
         //detailsright = (TextView) v.findViewById(R.id.detailsright);
         location = (TextView) v.findViewById(R.id.location);
@@ -94,6 +97,7 @@ public class fragment_QuestDetails extends Fragment {
         durationtextview.setText("Duration");
         actualduration.setText(database_loadDatabase.requiredtime.get(position));
 
-
+        int id = getResources().getIdentifier(database_loadDatabase.icon.get(position), "drawable", "com.eeproject.myvolunteer.myvolunteer");
+        icon.setImageResource(id);
     }
 }

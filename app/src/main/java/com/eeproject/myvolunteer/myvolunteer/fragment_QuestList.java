@@ -124,9 +124,8 @@ public class fragment_QuestList extends Fragment{
             title.setText(database_loadDatabase.titlelist.get(position));
             expirydate.setText(database_loadDatabase.expirydatelist.get(position));
 
-            //int rand = (int)(Math.random()*10);
-            //int id = getResources().getIdentifier(parameter.defaulticonpath[rand], "drawable", "com.eeproject.myvolunteer.myvolunteer");
-            icon.setImageResource(R.drawable.nomoreyup);
+            int id = getResources().getIdentifier(database_loadDatabase.icon.get(position), "drawable", "com.eeproject.myvolunteer.myvolunteer");
+            icon.setImageResource(id);
 
 
             return convertView;

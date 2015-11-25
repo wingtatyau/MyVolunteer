@@ -55,8 +55,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     QUEST_CURRENT_PARTI + " INTEGER NOT NULL, " +
                     QUEST_REQUIRED_TIME + " TEXT NOT NULL, " +
                     PARTI_NUMBER + " TEXT NOT NULL, " +
-                    USER_ID + " INTEGER NOT NULL" +
-                    ICONPATH + " TEXT NOT NULL" +
+                    USER_ID + " INTEGER NOT NULL, " +
+                    ICONPATH + " TEXT NOT NULL, " +
                     LOCATION + " TEXT NOT NULL)";
 
 

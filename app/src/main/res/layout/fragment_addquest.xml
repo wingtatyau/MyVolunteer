@@ -100,7 +100,8 @@
             android:layout_alignStart="@+id/datetextview"
             android:layout_alignRight="@+id/infoedittext"
             android:layout_alignEnd="@+id/infoedittext"
-            android:editable="false" />
+            android:editable="false"
+            android:inputType="datetime" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -145,7 +146,8 @@
             android:layout_alignLeft="@+id/locationtextview"
             android:layout_alignStart="@+id/locationtextview"
             android:layout_alignRight="@+id/langtextveiw"
-            android:layout_alignEnd="@+id/langtextveiw" />
+            android:layout_alignEnd="@+id/langtextveiw"
+             />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -210,7 +212,8 @@
             android:layout_alignStart="@+id/timetextview"
             android:layout_alignRight="@+id/locationtextview"
             android:layout_alignEnd="@+id/locationtextview"
-            android:text="HH" />
+            android:text="HH"
+            android:inputType="time" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -231,7 +234,8 @@
             android:layout_alignEnd="@+id/locationedittext"
             android:layout_toEndOf="@+id/titletextview"
             android:layout_toRightOf="@+id/titletextview"
-            android:text="MM" />
+            android:text="MM"
+            android:inputType="time" />
 
         <TextView
             android:layout_width="wrap_content"

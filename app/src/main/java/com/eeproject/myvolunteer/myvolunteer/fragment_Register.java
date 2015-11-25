@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,7 +52,15 @@ public class fragment_Register extends Fragment{
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(firstName.getText().toString(), lastName.getText().toString(), organization.getText().toString());
+                if(firstName.getText().toString().equals("")){
+                    sethighlight(firstName, "First Name ");
+                }else{
+                    if(lastName.getText().toString().equals("")){
+                        sethighlight(lastName, "Last Name ");
+                    }else{
+                        finish(firstName.getText().toString(), lastName.getText().toString(), organization.getText().toString());
+                    }
+                }
             }
         });
     }
@@ -60,7 +69,11 @@ public class fragment_Register extends Fragment{
     public void finish(String First, String Last, String Organization){
         user.setFirstname(First);
         user.setLastname(Last);
-        user.setOrganization(Organization);
+        if(Organization.equals("")){
+            user.setOrganization("No Organization");
+        }else{
+            user.setOrganization(Organization);
+        }
 
         if(database_writeDatabase.writeUser(user, context) == true) {
             Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();
@@ -73,5 +86,10 @@ public class fragment_Register extends Fragment{
             Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    public void sethighlight(EditText v, String type){
+        v.setHint(type + " cannot be empty!");
+        v.setHintTextColor(Color.GRAY);
     }
 }
