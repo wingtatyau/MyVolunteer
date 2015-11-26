@@ -3,4 +3,55 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text = "Monthly Ranking"
+                android:id = "@+id/month"
+                android:textColor="#FF0077FF"
+                android:textSize="24dp"
+                android:layout_margin ="5dp"
+                android:layout_marginTop="15dp"
+                />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="770dp"
+                android:id = "@+id/monthList"
+                android:layout_row="2"
+                android:layout_column="10"
+                android:layout_below="@id/month">
+            </ListView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text = "Overall Ranking"
+                android:id = "@+id/overall"
+                android:textColor="#FF0077FF"
+                android:textSize="24dp"
+                android:layout_margin ="5dp"
+                android:layout_below="@id/monthList"
+                />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="770dp"
+                android:id = "@+id/overallList"
+                android:layout_row="2"
+                android:layout_column="10"
+                android:layout_below="@id/overall">
+            </ListView>
+
+        </RelativeLayout>
+    </ScrollView>
+
 </LinearLayout>

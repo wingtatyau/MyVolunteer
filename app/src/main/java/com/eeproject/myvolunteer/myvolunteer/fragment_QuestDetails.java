@@ -68,6 +68,7 @@ public class fragment_QuestDetails extends Fragment {
             public void onClick(View v) {
                 //log to database
                 database_writeDatabase.updatetable(context, DBHelper.TABLE_NAME, DBHelper.QUEST_CURRENT_PARTI, position+1, (database_loadDatabase.questcurrentpartilist.get(position)+1));
+
                 database_loadDatabase.setArrayList(context);
                 getinformation();
                 Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
