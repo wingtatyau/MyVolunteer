@@ -19,6 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.Arrays;
+
 /**
  * Created by Altman on 2015-11-12.
  */
@@ -34,6 +41,8 @@ public class login extends Fragment{
     Cursor cursor;
 
     View drawer;
+
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +62,10 @@ public class login extends Fragment{
         register = (Button) v.findViewById(R.id.regtisterbutton);
         rememberme = (CheckBox) v.findViewById(R.id.remembermecheckbox);
 
+
+
+
+        // Clicked Login
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,74 +75,173 @@ public class login extends Fragment{
                     sethighlight(password, "Password");
                 }else{
                     login(username.getText().toString(), password.getText().toString());
+
                 }
             }
         });
+
+
+
+        // Clicked Register
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(username.getText().toString().equals("")){
+                if (username.getText().toString().equals("")) {
                     sethighlight(username, "Username");
-                }else if(password.getText().toString().equals("")){
+                } else if (password.getText().toString().equals("")) {
                     sethighlight(password, "Password");
-                }else{
-                    register(username.getText().toString(), password.getText().toString());
+                } else {
+
+                    rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            System.out.println("There are " + snapshot.getChildrenCount() + " approved users");
+                            if (snapshot.getChildrenCount() > 0) {
+                                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                                    user f_user = userSnapshot.getValue(user.class);
+                                    if (!username.getText().toString().equals(f_user.getUsername())) {
+
+                                        rootRef.child("User to be approved").addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                System.out.println("There are " + dataSnapshot.getChildrenCount() + " users to be approved");
+                                                if (dataSnapshot.getChildrenCount() > 0) {
+                                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                                        user A_user = userSnapshot.getValue(user.class);
+                                                        if (!username.getText().toString().equals(A_user.getUsername()))
+                                                            register(username.getText().toString(), password.getText().toString());
+
+                                                    }
+                                                } else
+                                                    register(username.getText().toString(), password.getText().toString());
+                                            }
+
+                                            @Override
+                                            public void onCancelled(FirebaseError firebaseError2) {
+                                                System.out.println("The read failed: " + firebaseError2.getMessage());
+                                            }
+                                        });
+
+                                    }
+
+                                }
+                            } else
+                                register(username.getText().toString(), password.getText().toString());
+
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                            System.out.println("The read failed: " + firebaseError.getMessage());
+                        }
+                    });
+
                 }
             }
         });
+
+
     }
 
     //Perform the login process
-    public void login(String username, String password){
-        //Get database, compare, if yes -> login, else return
-        for(int i = 0; i < database_loadDatabase.usernamelist.size(); i++){
-            if(username.equals(database_loadDatabase.usernamelist.get(i))){
-                if(password.equals(database_loadDatabase.passwordlist.get(i))){
-                    parameter.login.set(true);
-                    Toast.makeText(context, "You login-ed! Welcome!", Toast.LENGTH_SHORT).show();
-                    TextView displayusername = (TextView)drawer.findViewById(R.id.name);
-                    displayusername.setText(username);
+    public void login(final String username, final String password){
 
-                    int ranking_mark = Integer.parseInt(database_loadDatabase.ranking_mark.get(i));
-                    String iconpath = database_loadDatabase.iconpathlist.get(i);
-                    String firstName = database_loadDatabase.firstnamelist.get(i);
-                    String lastName = database_loadDatabase.lastnamelist.get(i);
-                    String organization = database_loadDatabase.organizationlist.get(i);
-                    String questIssuedList = database_loadDatabase.questIssuedList.get(i);
-                    String questAcceptedList = database_loadDatabase.questAcceptedList.get(i);
-                    user createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
+        rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println("There are " + snapshot.getChildrenCount() + " approved users");
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    user f_user = userSnapshot.getValue(user.class);
+                    Log.v("True User?: ", String.valueOf(username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())));
+                    if (username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())) {
 
-                    TextView title = (TextView) drawer.findViewById(R.id.name);
-                    title.setText(createuser.getUsername());
-                    parameter.setUserID(createuser.getUsername());
+                        parameter.login.set(true);
 
-                    //Jump to fragment_MyAccount
-                    fragment_MyAccount f1 = new fragment_MyAccount();
-                    parameter.logineduser = createuser;
-                    f1.setUser(createuser);
-                    getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
+                        if(rememberme.isChecked()){
+                            parameter.remeberme.set(true);
+                        }
+
+                        TextView displayusername = (TextView) drawer.findViewById(R.id.name);
+                        displayusername.setText(username);
+
+                        int ranking_mark = f_user.getRanking_mark();
+                        String iconpath = f_user.getIconpath();
+                        String firstName = f_user.getFirstname();
+                        String lastName = f_user.getLastname();
+                        String organization = f_user.getOrganization();
+                        String questIssuedList = f_user.getQuest_issued();
+                        String questAcceptedList = f_user.getQuest_accepted();
+                        user createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
+
+                        TextView title = (TextView) drawer.findViewById(R.id.name);
+                        title.setText(createuser.getUsername());
+                        parameter.setUserID(createuser.getUsername());
+
+
+                        Toast.makeText(context, "You login-ed! Welcome!", Toast.LENGTH_SHORT).show();
+                        //Jump to fragment_MyAccount
+                        fragment_MyAccount f1 = new fragment_MyAccount();
+                        parameter.logineduser = createuser;
+                        f1.setUser(createuser);
+                        getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
+
+
+                    }
+                    else {
+                        Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
             }
-        }
-        if(parameter.login.get() == false){
-            Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show();
-        }
 
-        if(rememberme.isChecked()){
-            parameter.remeberme.set(true);
-        }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+        rootRef.child("User to be approved").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println("There are " + dataSnapshot.getChildrenCount() + " users to be approved");
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        user A_user = userSnapshot.getValue(user.class);
+                        if (username.equals(A_user.getUsername()) && password.equals(A_user.getPassword()))
+
+                            Toast.makeText(context, "Account is being verified", Toast.LENGTH_LONG).show();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError2) {
+                System.out.println("The read failed: " + firebaseError2.getMessage());
+            }
+        });
+
+
+
+
+
     }
 
     //Perform the register process
-    public void register(String username, String password){
+    public void register(final String username, String password){
+
         int rand = (int)(Math.random()*10);
         Log.d("Math random: ", String.valueOf(rand));
-        boolean exist = false;
-        for(int i = 0; i < database_loadDatabase.usernamelist.size(); i++){
-            if(username.equals(database_loadDatabase.usernamelist.get(i))) {
-                exist = true;
-            }
-        }
+
+
+
+
+//        for(int i = 0; i < database_loadDatabase.usernamelist.size(); i++){
+//            if(username.equals(database_loadDatabase.usernamelist.get(i))) {
+//
+//            }
+//        }
         boolean validEmail = true;
         int num_of_at = 0;
         int index_of_at = 1;
@@ -183,7 +295,7 @@ public class login extends Fragment{
             validEmail = false;
 
 
-        if(exist != true && validEmail) {
+        if(validEmail) {
             user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", "No Quest Issued yet", "No Quest Accepted yet");
             Log.d("Username: ", createuser.getUsername());
             Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();

@@ -14,6 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 /**
  * Created by Altman on 2015/11/5.
  */
@@ -32,6 +37,9 @@ public class fragment_QuestDetails extends Fragment {
 
     //position value
     int position;
+
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,9 +75,33 @@ public class fragment_QuestDetails extends Fragment {
             @Override
             public void onClick(View v) {
                 //log to database
-                database_writeDatabase.updatetable(context, DBHelper.TABLE_NAME, DBHelper.QUEST_CURRENT_PARTI, position+1, (database_loadDatabase.questcurrentpartilist.get(position)+1));
+//                database_writeDatabase.updatetable(context, DBHelper.TABLE_NAME, DBHelper.QUEST_CURRENT_PARTI, position+1, (database_loadDatabase.questcurrentpartilist.get(position)+1));
+//
+//                database_loadDatabase.setArrayList(context);
 
-                database_loadDatabase.setArrayList(context);
+//                rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        if (dataSnapshot.getChildrenCount() > 0) {
+//
+//                            for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
+//                                quest quest = questsnapshot.getValue(quest.class);
+//
+//
+//
+//                            }
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(FirebaseError firebaseError) {
+//
+//                    }
+//                });
+//
+//                rootRef.child("Quest").child("currentparti").setValue();
+
                 getinformation();
                 Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
             }
@@ -86,23 +118,49 @@ public class fragment_QuestDetails extends Fragment {
     }
 
     public void getinformation(){
+
         Log.d("Position received", String.valueOf(position));
-        name.setText(database_loadDatabase.titlelist.get(position));
-        expirydate.setText("Expiry Date: " + database_loadDatabase.expirydatelist.get(position));
 
-        situationleft.setText("Number of participants");
-        situaitonright.setText(database_loadDatabase.questcurrentpartilist.get(position) + "/" + database_loadDatabase.partinumberlist.get(position));
+        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() > 0) {
 
-        detailsleft.setText(database_loadDatabase.infolist.get(position));
+                    for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
+                        quest quest = questsnapshot.getValue(quest.class);
 
-        location.setText(database_loadDatabase.locationlist.get(position));
-        contact.setText(database_loadDatabase.questuserlist.get(position));
-        catagorytextview.setText(database_loadDatabase.catagorylist.get(position));
-        languagetextview.setText(database_loadDatabase.langlist.get(position));
-        durationtextview.setText("Duration");
-        actualduration.setText(database_loadDatabase.requiredtime.get(position));
+                        // TODO: 3/17/16 Add if statement using the key 
+                        
+                        name.setText(quest.getTitle());
+                        expirydate.setText("Expiry Date: " + quest.getExpirydate());
 
-        int id = getResources().getIdentifier(database_loadDatabase.icon.get(position), "drawable", "com.eeproject.myvolunteer.myvolunteer");
-        icon.setImageResource(id);
+                        situationleft.setText("Number of participants");
+                        situaitonright.setText(quest.getCurrentparti() + "/" + quest.getPartinumber());
+
+                        detailsleft.setText(quest.getInfo());
+
+                        location.setText(quest.getLocation());
+                        contact.setText(quest.getUser());
+                        catagorytextview.setText(quest.getCatagory());
+                        languagetextview.setText(quest.getRequiredLanguage());
+                        durationtextview.setText("Duration");
+                        actualduration.setText(quest.getRequiredTime());
+
+                        int id = getResources().getIdentifier(quest.getIcon(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
+                        icon.setImageResource(id);
+
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
     }
 }

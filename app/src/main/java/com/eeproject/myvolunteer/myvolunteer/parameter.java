@@ -12,10 +12,13 @@ public class parameter {
                             "Min", "French", "German", "Tagalog", "Indonesian", "Thai", "Vietnamese"};
     public static String[] defaulticonpath = {"nomore369", "nomorehehe", "nomoreangry", "nomorebam", "nomorebounce",
                                     "nomoreflowerface", "nomorefrown", "nomoregood", "nomorequestion", "nomorewtf", "nomoreyup"};
+    public static String[] edittextname = {"Title", "Information", "Date", "Location", "Partcipant", "Hour", "Minute"};
     public static AtomicBoolean login = new AtomicBoolean(false);
     public static AtomicBoolean remeberme = new AtomicBoolean(false);
     public static user logineduser = new user("Guest", null, 0, "nomorequestion", "Guest", null, null, null, null);
     public static int userID;
+    public static String sCatagory;
+    public static String sLanguage;
 
     public static void setUserID(String user){
         for(int i = 0; i < database_loadDatabase.usernamelist.size(); i++) {

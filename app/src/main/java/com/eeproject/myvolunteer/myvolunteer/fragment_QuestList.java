@@ -18,13 +18,18 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Altman on 2015/10/30.
  */
-public class fragment_QuestList extends Fragment{
+public class fragment_QuestList extends Fragment {
     Context context;
 
     //setup DBHelper
@@ -48,6 +53,17 @@ public class fragment_QuestList extends Fragment{
 
     ListView list;
 
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
+
+    public void resetList(){
+        sortedDate.clear();
+        sortedIcon.clear();
+        sortedTitle.clear();
+        originalposition.clear();
+    }
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_questlistfragment, null);
@@ -58,31 +74,27 @@ public class fragment_QuestList extends Fragment{
     }
 
     //Interface
-    public interface PassValue
-    {
+    public interface PassValue {
         public void setPosition(int position);
     }
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try{
+        try {
             passvalue = (PassValue) activity;
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("Unable to pass position", null);
         }
 
     }
 
     //Set up list
-    public void setlist(View v){
+    public void setlist(final View v) {
+
+
         list = (ListView) v.findViewById(R.id.list);
-        for(int i = 0; i < database_loadDatabase.catagorylist.size(); i++){
-            sortedIcon.add(database_loadDatabase.icon.get(i));
-            sortedDate.add(database_loadDatabase.expirydatelist.get(i));
-            sortedTitle.add(database_loadDatabase.titlelist.get(i));
-            originalposition.add(i);
-        }
+
         adapter = new ListAdapter(context);
         adapter.notifyDataSetChanged();
         list.setAdapter(adapter);
@@ -91,12 +103,19 @@ public class fragment_QuestList extends Fragment{
         catagoryspinner = (Spinner) v.findViewById(R.id.catspinner);
         languagespinner = (Spinner) v.findViewById(R.id.langspinner);
 
+        parameter.sCatagory = parameter.catagory[0];
+        parameter.sLanguage = parameter.language[0];
+
+        Log.v("sCatagory", parameter.sCatagory);
+        Log.v("sLanguage", parameter.sLanguage);
+
         ArrayAdapter<String> catadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.catagory);
         catagoryspinner.setAdapter(catadapter);
         catagoryspinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                regeneratelist(parent.getSelectedItem().toString(), "Category");
+                parameter.sCatagory = parent.getSelectedItem().toString();
+                regeneratelist();
             }
 
             @Override
@@ -110,7 +129,8 @@ public class fragment_QuestList extends Fragment{
         languagespinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                regeneratelist(parent.getSelectedItem().toString(), "Language");
+                parameter.sLanguage = parent.getSelectedItem().toString();
+                regeneratelist();
             }
 
             @Override
@@ -123,65 +143,99 @@ public class fragment_QuestList extends Fragment{
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                passvalue.setPosition(originalposition.get(originalposition.size()-position-1));
+                passvalue.setPosition(position);
                 Log.d("Position passed", String.valueOf(position));
             }
         });
+
+
+        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() > 0) {
+
+                    resetList();
+
+                    int index = 0;
+                    for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
+                        quest quest = questsnapshot.getValue(quest.class);
+                        sortedIcon.add(quest.getIcon());
+                        sortedDate.add(quest.getExpirydate());
+                        sortedTitle.add(quest.getTitle());
+                        originalposition.add(index++);
+                    }
+
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
     }
 
-    private void regeneratelist(String s, String type) {
+    private void regeneratelist() {
         //database_loadDatabase.setArrayList(context);
-        sortedDate.clear();
-        sortedIcon.clear();
-        sortedTitle.clear();
-        originalposition.clear();
-        if(type.equals("Category")) {
-            if (s.equals("All") == false) {
-                for (int i = 0; i < database_loadDatabase.catagorylist.size(); i++) {
-                    if (database_loadDatabase.catagorylist.get(i).equals(s)) {
-                        sortedTitle.add(database_loadDatabase.titlelist.get(i));
-                        sortedDate.add(database_loadDatabase.expirydatelist.get(i));
-                        sortedIcon.add(database_loadDatabase.icon.get(i));
-                        originalposition.add(i);
+
+        Log.v("Inside sCatagory", parameter.sCatagory);
+        Log.v("Inside sLanguage", parameter.sLanguage);
+
+        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                resetList();
+
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    int index = 0;
+                    for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
+                        quest quest = questsnapshot.getValue(quest.class);
+                        if (parameter.sCatagory == "All" && parameter.sLanguage == "No Preference") {
+                            sortedIcon.add(quest.getIcon());
+                            sortedDate.add(quest.getExpirydate());
+                            sortedTitle.add(quest.getTitle());
+                            originalposition.add(index++);
+                        }
+                        else if (parameter.sCatagory == "All" && quest.getRequiredLanguage().equals(parameter.sLanguage)) {
+                            sortedIcon.add(quest.getIcon());
+                            sortedDate.add(quest.getExpirydate());
+                            sortedTitle.add(quest.getTitle());
+                            originalposition.add(index++);
+                        }
+                        else if (parameter.sLanguage == "No Preference" && quest.getCatagory().equals(parameter.sCatagory)) {
+                            Log.v("Hereerere","YEEeeeee");
+                            sortedIcon.add(quest.getIcon());
+                            sortedDate.add(quest.getExpirydate());
+                            sortedTitle.add(quest.getTitle());
+                            originalposition.add(index++);
+                        }
+                        }
+                        adapter.notifyDataSetChanged();
                     }
                 }
-            } else {
 
-                for (int i = 0; i < database_loadDatabase.catagorylist.size(); i++) {
-                    sortedIcon.add(database_loadDatabase.icon.get(i));
-                    sortedDate.add(database_loadDatabase.expirydatelist.get(i));
-                    sortedTitle.add(database_loadDatabase.titlelist.get(i));
-                    originalposition.add(i);
+                @Override
+                public void onCancelled (FirebaseError firebaseError){
+
                 }
             }
-        }else{
-            if (s.equals("No Preference") == false) {
-                for (int i = 0; i < database_loadDatabase.langlist.size(); i++) {
-                    if (database_loadDatabase.langlist.get(i).equals(s)) {
-                        sortedTitle.add(database_loadDatabase.titlelist.get(i));
-                        sortedDate.add(database_loadDatabase.expirydatelist.get(i));
-                        sortedIcon.add(database_loadDatabase.icon.get(i));
-                        originalposition.add(i);
-                    }
-                }
-            } else {
 
-                for (int i = 0; i < database_loadDatabase.catagorylist.size(); i++) {
-                    sortedIcon.add(database_loadDatabase.icon.get(i));
-                    sortedDate.add(database_loadDatabase.expirydatelist.get(i));
-                    sortedTitle.add(database_loadDatabase.titlelist.get(i));
-                    originalposition.add(i);
-                }
-            }
+            );
+
+
+            adapter.notifyDataSetChanged();
+            list.setAdapter(adapter);
         }
-        adapter.notifyDataSetChanged();
-        list.setAdapter(adapter);
-    }
 
-    public class ListAdapter extends BaseAdapter {
+
+        public class ListAdapter extends BaseAdapter {
         private LayoutInflater ListInflater;
 
-        public ListAdapter(Context c){
+        public ListAdapter(Context c) {
             ListInflater = LayoutInflater.from(c);
         }
 
@@ -204,12 +258,12 @@ public class fragment_QuestList extends Fragment{
         public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = ListInflater.inflate(R.layout.questitem, null);
 
-            title = (TextView)convertView.findViewById(R.id.titletextview);
-            expirydate = (TextView)convertView.findViewById(R.id.expirydatetextview);
-            icon = (ImageView)convertView.findViewById(R.id.imageView);
+            title = (TextView) convertView.findViewById(R.id.titletextview);
+            expirydate = (TextView) convertView.findViewById(R.id.expirydatetextview);
+            icon = (ImageView) convertView.findViewById(R.id.imageView);
 
             title.setText(sortedTitle.get(sortedTitle.size() - position - 1));
-            expirydate.setText(sortedDate.get(sortedTitle.size() - position- 1));
+            expirydate.setText(sortedDate.get(sortedTitle.size() - position - 1));
 
             int id = getResources().getIdentifier(sortedIcon.get(sortedTitle.size() - position - 1), "drawable", "com.eeproject.myvolunteer.myvolunteer");
             icon.setImageResource(id);

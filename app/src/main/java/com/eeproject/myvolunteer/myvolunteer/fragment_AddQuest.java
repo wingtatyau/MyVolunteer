@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,10 +24,15 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Altman on 2015-11-12.
@@ -48,22 +54,36 @@ public class fragment_AddQuest extends Fragment {
     EditText titleedittext, infoedittext, dateedittext, locationedittext, participantedittext, timerequirehouredittext, timerequireminuteedittext;
     Spinner catagoryspinner, languagespinner;
     CheckBox termofusecheckbox;
+    List<EditText> edittextlist = new ArrayList<>();
+
 
     ImageView title;
 
     //setup DBHelper
-    SQLiteDatabase db;
-    public DBHelper helper;
-    Cursor cursor;
+//    SQLiteDatabase db;
+//    public DBHelper helper;
+//    Cursor cursor;
 
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_addquest, null);
         context = container.getContext();
-        helper = new DBHelper(context, DBHelper.DATABASE_NAME);
+//        helper = new DBHelper(context, DBHelper.DATABASE_NAME);
         addquest(v);
         return v;
+    }
+
+
+    public void setedittextarray(){
+        edittextlist.add(titleedittext);
+        edittextlist.add(infoedittext);
+        edittextlist.add(dateedittext);
+        edittextlist.add(locationedittext);
+        edittextlist.add(participantedittext);
+        edittextlist.add(timerequirehouredittext);
+        edittextlist.add(timerequireminuteedittext);
     }
 
     //Implementing the add quest float
@@ -116,6 +136,7 @@ public class fragment_AddQuest extends Fragment {
             }
         });
 
+        setedittextarray();
 
         catagoryspinner = (Spinner) view.findViewById(R.id.catspinner);
         languagespinner = (Spinner) view.findViewById(R.id.langspinner);
@@ -129,59 +150,51 @@ public class fragment_AddQuest extends Fragment {
         termofusecheckbox = (CheckBox)view.findViewById(R.id.termofusecheckBox);
 
         submit = (Button)view.findViewById(R.id.submitbutton);
-
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (titleedittext.getText().toString().equals("") || titleedittext.getText().toString().equals("Title cannot be null!")) {
-                    sethighlight(titleedittext, "Title");
-                } else {
-                    if (infoedittext.getText().toString().equals("") || infoedittext.getText().toString().equals("Information cannot be null!")) {
-                        sethighlight(infoedittext, "Information");
-                    } else {
-                        if (locationedittext.getText().toString().equals("") || locationedittext.getText().toString().equals("Location cannot be null!") ){
-                            sethighlight(locationedittext, "Location");
-                        } else {
-                            if (dateedittext.getText().toString().equals("") || locationedittext.getText().toString().equals("Location cannot be null!")) {
-                                sethighlight(dateedittext, "Date");
-                            } else {
-                                if (timerequirehouredittext.getText().toString().equals("") || timerequirehouredittext.getText().toString().equals("Time Required cannot be null!")) {
-                                    sethighlight(timerequirehouredittext, "Hour");
-                                }else {
-                                    if(timerequireminuteedittext.getText().toString().equals("")){
-                                        sethighlight(timerequireminuteedittext, "Minute");
-                                    }else {
-                                        if (participantedittext.getText().toString().equals("") || participantedittext.getText().toString().equals("Number of participants cannot be null!")) {
-                                            sethighlight(participantedittext, "Number of participants");
-                                        } else {
-                                            if (termofusecheckbox.isChecked() == false) {
-                                                Toast.makeText(context, "You must agree the term of use before posting quest!", Toast.LENGTH_LONG).show();
-                                            } else {
-                                                //Create object
-                                                quest Quest = new quest(titleedittext.getText().toString(), infoedittext.getText().toString(),
-                                                        dateedittext.getText().toString(), locationedittext.getText().toString(),
-                                                        catagoryspinner.getSelectedItem().toString(), languagespinner.getSelectedItem().toString(),
-                                                        parameter.logineduser.getFirstname() + " " + parameter.logineduser.getLastname(),
-                                                        timerequirehouredittext.getText().toString() + ":" + timerequireminuteedittext.getText().toString(),
-                                                        0, Integer.parseInt(participantedittext.getText().toString()));
-                                                database_writeDatabase.writeQuest(Quest, context);
-                                                Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
+                for (int i = 0; i < edittextlist.size(); i++) {
+                    if (edittextlist.get(i).getText().toString().equals("")) {
+                        sethighlight(edittextlist.get(i), parameter.edittextname[i]);
+                    }else if(termofusecheckbox.isChecked() == false){
+                        Toast.makeText(v.getContext(), "You must agree the term of use", Toast.LENGTH_LONG).show();
+                    }else if(i == edittextlist.size()-1){
+                        //Create object
 
-                                                //Return to quest list fragment
-                                                fragment_QuestList fragment1 = new fragment_QuestList();
-                                                getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
 
-                                            }
-                                        }
-                                    }
+                        quest Quest = new quest(titleedittext.getText().toString(), infoedittext.getText().toString(),
+                                dateedittext.getText().toString(), locationedittext.getText().toString(),
+                                catagoryspinner.getSelectedItem().toString(), languagespinner.getSelectedItem().toString(),
+                                parameter.logineduser.getFirstname() + " " + parameter.logineduser.getLastname(),
+                                timerequirehouredittext.getText().toString() + ":" + timerequireminuteedittext.getText().toString(),
+                                0, Integer.parseInt(participantedittext.getText().toString()), parameter.logineduser.getIconpath());
+
+
+                        Log.v("DEBUG", parameter.logineduser.getIconpath());
+
+                        rootRef.child("Quest").push().setValue(Quest, new Firebase.CompletionListener() {
+                            @Override
+                            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                if (firebaseError != null) {
+                                    System.out.println("Data could not be saved. " + firebaseError.getMessage());
+                                    Toast.makeText(context, "Add Quest unsuccessful!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    System.out.println("Data saved successfully.");
+                                    Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
+
+                                    //Return to quest list fragment
+                                    fragment_QuestList fragment1 = new fragment_QuestList();
+                                    getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
                                 }
                             }
-                        }
+                        });
+
                     }
                 }
             }
         });
     }
+
 
     public void datepicker(){
         DatePickerDialog dpd = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {

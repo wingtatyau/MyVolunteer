@@ -31,6 +31,9 @@ public class user {
         //----------------------------------
     }
 
+    // empty default constructor, necessary for Firebase to be able to deserialize users
+    public user(){}
+
     public void setUsername(String username) {
         this.username = username;
     }

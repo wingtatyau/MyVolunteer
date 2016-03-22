@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.facedemo.facedemo.ChatActivity;
 import com.example.facedemo.facedemo.FaceConversionUtil;
+import com.firebase.client.Firebase;
 
 
 public class MainActivity extends Activity implements fragment_QuestList.PassValue {
@@ -42,7 +43,10 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         		getWindow().setSoftInputMode(
-				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        Firebase.setAndroidContext(this);
+
         setContentView(R.layout.activity_main);
         new Thread(new Runnable() {
             @Override
@@ -50,6 +54,7 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
                 FaceConversionUtil.getInstace().getFileText(getApplication());
             }
         }).start();
+        helper.getDatabase(context);
         changeQuestList();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("We are Volunteer!");
@@ -57,7 +62,7 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
 
         database_loadDatabase.setArrayList(context);
 
-        //Get Intent
+        //Get Intents
         Intent intent = getIntent();
         String position = intent.getStringExtra("position");
         
@@ -135,7 +140,7 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
     }
 
     private void changezuyoChat() {
-        ChatActivity fragment1 = new ChatActivity();
+        fragment_Chat  fragment1 = new fragment_Chat();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
