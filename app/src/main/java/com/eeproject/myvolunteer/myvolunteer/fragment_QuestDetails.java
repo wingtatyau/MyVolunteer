@@ -126,29 +126,44 @@ public class fragment_QuestDetails extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) {
 
+                    // Reverse order
+                    int tempPosition = 0;
+
                     for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
                         quest quest = questsnapshot.getValue(quest.class);
 
-                        // TODO: 3/17/16 Add if statement using the key 
-                        
-                        name.setText(quest.getTitle());
-                        expirydate.setText("Expiry Date: " + quest.getExpirydate());
+                        Log.v("TPosition", String.valueOf(tempPosition));
+                        Log.v("TQuest Name", quest.getTitle());
+                        Log.v("Position", String.valueOf(position));
+                        Log.v("Number of Children", String.valueOf(dataSnapshot.getChildrenCount()));
 
-                        situationleft.setText("Number of participants");
-                        situaitonright.setText(quest.getCurrentparti() + "/" + quest.getPartinumber());
+                        if(tempPosition == (dataSnapshot.getChildrenCount() - position - 1)) {
 
-                        detailsleft.setText(quest.getInfo());
+                            Log.v("TP=0", "printed");
 
-                        location.setText(quest.getLocation());
-                        contact.setText(quest.getUser());
-                        catagorytextview.setText(quest.getCatagory());
-                        languagetextview.setText(quest.getRequiredLanguage());
-                        durationtextview.setText("Duration");
-                        actualduration.setText(quest.getRequiredTime());
+                            name.setText(quest.getTitle());
+                            expirydate.setText("Expiry Date: " + quest.getExpirydate());
 
-                        int id = getResources().getIdentifier(quest.getIcon(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
-                        icon.setImageResource(id);
+                            situationleft.setText("Number of participants");
+                            situaitonright.setText(quest.getCurrentparti() + "/" + quest.getPartinumber());
 
+                            detailsleft.setText(quest.getInfo());
+
+                            location.setText(quest.getLocation());
+                            contact.setText(quest.getUser());
+                            catagorytextview.setText(quest.getCatagory());
+                            languagetextview.setText(quest.getRequiredLanguage());
+                            durationtextview.setText("Duration");
+                            actualduration.setText(quest.getRequiredTime());
+
+                            int id = getResources().getIdentifier(quest.getIcon(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
+                            icon.setImageResource(id);
+
+                            tempPosition++;
+
+                        }
+                        else if(tempPosition < (dataSnapshot.getChildrenCount() - position - 1)) tempPosition++;
+                        else break;
 
                     }
 
