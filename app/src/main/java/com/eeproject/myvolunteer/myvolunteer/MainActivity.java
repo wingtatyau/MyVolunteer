@@ -55,7 +55,7 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
             }
         }).start();
         helper.getDatabase(context);
-        changeQuestList();
+        changeQuestListRecyclerView();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("We are Volunteer!");
         toolbar.setNavigationIcon(R.drawable.nomoregood_small);
@@ -157,6 +157,11 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
 
     public void changeQuestList() {
         fragment_QuestList fragment1 = new fragment_QuestList();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
+    }
+
+    public void changeQuestListRecyclerView(){
+        fragment_QuestListRecyclerView fragment1 = new fragment_QuestListRecyclerView();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 
