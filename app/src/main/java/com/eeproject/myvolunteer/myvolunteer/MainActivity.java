@@ -79,7 +79,8 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
                     toolbar.setTitle("Add Quest!");
                 }
                 if (title.equals("Quest List")) {
-                    changeQuestList();
+//                    changeQuestList();
+                    changeQuestListRecyclerView();
                     toolbar.setTitle("We are Volunteer!");
                 }
                 if (title.equals("My Account")) {
