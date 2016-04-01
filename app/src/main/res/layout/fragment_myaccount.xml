@@ -1,156 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
 
     <ImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src = "@drawable/dummy"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_below = "@+id/toolbar"
         android:id="@+id/icon" />
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/icon"
-        android:layout_marginTop="20dp"
-        android:text = "Cheung FONG"
-        android:id = "@+id/nameA"
-        android:textColor="#000000"
-        android:textSize="24dp"/>
+        android:layout_below = "@+id/icon"
+        android:layout_marginLeft = "20dp"
+        android:layout_marginTop = "10dp"
+        android:layout_marginRight = "20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/icon"
-        android:layout_marginTop="48dp"
-        android:id = "@+id/organization"
-        android:text = "LapLap Home"
-        android:textSize="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id = "@+id/contacttextview"
-        android:text = "CONTACT"
-        android:textSize="16dp"
-        android:textColor="#3F51B5"
-        android:layout_below="@+id/icon"
-        android:layout_alignLeft="@+id/icon"
-        android:layout_alignStart="@+id/icon" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Cheung FONG"
+            android:id = "@+id/nameA"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24dp"/>
 
-    <View
-        android:layout_width = "match_parent"
-        android:layout_height = "1dp"
-        android:layout_alignBottom="@+id/contacttextview"
-        android:background="#3F51B5"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:id="@+id/view" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below = "@+id/nameA"
+            android:id = "@+id/organization"
+            android:text = "LapLap Home"
+            android:textSize="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/contactleft"
-        android:text = "template"
-        android:layout_below="@+id/view"
-        android:layout_alignLeft="@+id/view"
-        android:layout_alignStart="@+id/view"
-        android:textColor="#000000"
-        android:textSize="16dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/contactright"
-        android:text = "template"
-        android:textSize="16dp"
-        android:textColor="#000000"
-        android:layout_below="@+id/view"
-        android:layout_alignRight="@+id/view"
-        android:layout_alignEnd="@+id/view" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id = "@+id/contacttextview"
+            android:text = "CONTACT"
+            android:textSize="16dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@+id/organization"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id = "@+id/questissuetextview"
-        android:text = "QUEST ISSUED"
-        android:textSize="16dp"
-        android:textColor="#3F51B5"
-        android:layout_below="@+id/contactright"
-        android:layout_alignLeft="@+id/icon"
-        android:layout_alignStart="@+id/icon" />
+        <View
+            android:layout_width = "match_parent"
+            android:layout_height = "1dp"
+            android:layout_alignBottom="@+id/contacttextview"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/view" />
 
-    <View
-        android:layout_width = "match_parent"
-        android:layout_height = "1dp"
-        android:layout_alignBottom="@+id/questissuetextview"
-        android:background="#3F51B5"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:id="@+id/view2" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/contactleft"
+            android:text = "template"
+            android:layout_below="@+id/view"
+            android:layout_alignLeft="@+id/view"
+            android:layout_alignStart="@+id/view"
+            android:textColor="#000000"
+            android:textSize="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/contactright"
+            android:text = "template"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:layout_below="@+id/view"
+            android:layout_alignRight="@+id/view"
+            android:layout_alignEnd="@+id/view" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/issueleft"
-        android:text = "template"
-        android:layout_below="@+id/view2"
-        android:layout_alignLeft="@+id/view"
-        android:layout_alignStart="@+id/view"
-        android:textSize="16dp"
-        android:textColor="#000000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id = "@+id/questissuetextview"
+            android:text = "QUEST ISSUED"
+            android:textSize="16dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@+id/contactright"
+             />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/issueright"
-        android:text = "template"
-        android:textSize="16dp"
-        android:textColor="#000000"
-        android:layout_below="@+id/view2"
-        android:layout_alignRight="@+id/view"
-        android:layout_alignEnd="@+id/view" />
+        <View
+            android:layout_width = "match_parent"
+            android:layout_height = "1dp"
+            android:layout_alignBottom="@+id/questissuetextview"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/view2" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id = "@+id/questaccepttextview"
-        android:text = "QUEST ACCEPTED"
-        android:textSize="16dp"
-        android:textColor="#3F51B5"
-        android:layout_below="@+id/issueright"
-        android:layout_alignLeft="@+id/icon"
-        android:layout_alignStart="@+id/icon" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/issueleft"
+            android:text = "template"
+            android:layout_below="@+id/view2"
+            android:layout_alignLeft="@+id/view"
+            android:layout_alignStart="@+id/view"
+            android:textSize="16dp"
+            android:textColor="#000000"/>
 
-    <View
-        android:layout_width = "match_parent"
-        android:layout_height = "1dp"
-        android:layout_alignBottom="@+id/questaccepttextview"
-        android:background="#3F51B5"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:id="@+id/view3" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/issueright"
+            android:text = "template"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:layout_below="@+id/view2"
+            android:layout_alignRight="@+id/view"
+            android:layout_alignEnd="@+id/view" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/acceptleft"
-        android:text = "acceptleft"
-        android:layout_below="@+id/view3"
-        android:layout_alignLeft="@+id/view"
-        android:layout_alignStart="@+id/view"
-        android:textSize="16dp"
-        android:textColor="#000000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id = "@+id/questaccepttextview"
+            android:text = "QUEST ACCEPTED"
+            android:textSize="16dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@+id/issueright"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/acceptright"
-        android:text = "template"
-        android:textSize="16dp"
-        android:textColor="#000000"
-        android:layout_below="@+id/view3"
-        android:layout_alignRight="@+id/view"
-        android:layout_alignEnd="@+id/view" />
+        <View
+            android:layout_width = "match_parent"
+            android:layout_height = "1dp"
+            android:layout_alignBottom="@+id/questaccepttextview"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:id="@+id/view3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acceptleft"
+            android:text = "acceptleft"
+            android:layout_below="@+id/view3"
+            android:layout_alignLeft="@+id/view"
+            android:layout_alignStart="@+id/view"
+            android:textSize="16dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acceptright"
+            android:text = "template"
+            android:textSize="16dp"
+            android:textColor="#000000"
+            android:layout_below="@+id/view3"
+            android:layout_alignRight="@+id/view"
+            android:layout_alignEnd="@+id/view" />
+    </RelativeLayout>
 
 </RelativeLayout>

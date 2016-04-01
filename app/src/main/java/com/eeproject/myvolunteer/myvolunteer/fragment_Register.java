@@ -48,7 +48,7 @@ public class fragment_Register extends Fragment{
 
     public void init(View v){
         ImageView image = (ImageView)v.findViewById(R.id.imageView);
-        image.setImageResource(R.drawable.loginlogo);
+        image.setImageResource(R.drawable.loginlogo_white);
         firstName = (EditText) v.findViewById(R.id.firstNameEditText);
         lastName = (EditText) v.findViewById(R.id.lastNameEditText);
         organization = (EditText) v.findViewById(R.id.organizationEditText);

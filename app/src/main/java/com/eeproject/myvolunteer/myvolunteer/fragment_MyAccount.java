@@ -3,6 +3,8 @@ package com.eeproject.myvolunteer.myvolunteer;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ public class fragment_MyAccount extends Fragment {
     Context context;
 
     ImageView icon;
+    Toolbar toolbar;
     TextView name, organization, contacttextview, contactleft, contactright, questissuetextview, issueleft,
             issueright, questaccepttextview, acceptleft, acceptright;
     user user;
@@ -28,6 +31,9 @@ public class fragment_MyAccount extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_myaccount, null);
         context = container.getContext();
+
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Profile");
 
         //Initialize the boolean, if login-ed, changed to true;
 

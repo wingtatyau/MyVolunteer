@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFAD03"
+>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="200dp"
                 android:id="@+id/imageView2"
+                android:layout_marginTop="40dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -24,6 +30,7 @@
                 android:text="Login/Register E-mail"
                 android:id="@+id/emailtextview"
                 android:layout_below="@+id/imageView2"
+                android:textColor="#FFFFFF"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="10dp"
@@ -35,6 +42,8 @@
                 android:inputType="textEmailAddress"
                 android:ems="10"
                 android:id="@+id/emailedittext"
+                android:textCursorDrawable="@null"
+                android:textColor = "@color/colorControlNormal"
                 android:layout_below="@+id/emailtextview"
                 android:layout_alignLeft="@+id/emailtextview"
                 android:layout_alignStart="@+id/emailtextview"
@@ -46,6 +55,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Password"
                 android:id="@+id/passwordtextview"
+                android:textColor="#FFFFFF"
                 android:layout_below="@+id/emailedittext"
                 android:layout_alignLeft="@+id/emailedittext"
                 android:layout_alignStart="@+id/emailedittext" />
@@ -55,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
+                android:textColor="#FFFFFF"
                 android:id="@+id/passwordedittext"
                 android:layout_below="@+id/passwordtextview"
                 android:layout_alignLeft="@+id/passwordtextview"
@@ -62,35 +73,29 @@
                 android:layout_marginRight="10dp"/>
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
                 android:text="LOGIN"
+                android:textColor="#FFFFFF"
                 android:id="@+id/loginbutton"
+                android:background="@color/colorPrimaryDark"
                 android:layout_gravity="right"
                 android:layout_below="@+id/passwordedittext"
-                android:layout_toLeftOf="@+id/regtisterbutton"
-                android:layout_toStartOf="@+id/regtisterbutton" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="REGISTER"
-                android:id="@+id/regtisterbutton"
-                android:layout_gravity="right"
-                android:layout_below="@+id/passwordedittext"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="10dp"/>
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remember me"
-                android:id="@+id/remembermecheckbox"
-                android:layout_alignTop="@+id/loginbutton"
-                android:layout_alignLeft="@+id/passwordedittext"
                 android:layout_alignStart="@+id/passwordedittext"
-                android:checked="false" />
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/textView_register"
+                android:layout_below="@+id/loginbutton"
+                android:layout_marginTop = "15dp"
+                android:textColor="#FFFFFF"
+                android:layout_centerHorizontal="true"
+                android:text = "No account yet? Create One!"/>
+
+
         </RelativeLayout>
 
     </ScrollView>
