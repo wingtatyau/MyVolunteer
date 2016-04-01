@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,12 +37,14 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
     //setup DBHelper
     SQLiteDatabase db;
     public DBHelper helper;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         		getWindow().setSoftInputMode(
                         WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         Firebase.setAndroidContext(this);
 
         setContentView(R.layout.activity_main);
@@ -54,16 +55,17 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
             }
         }).start();
         helper.getDatabase(context);
-        ScrollingActivity fragment1 = new ScrollingActivity();
-        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
-        //changeQuestListRecyclerView();
+        changeQuestListRecyclerView();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("We are Volunteer!");
+        toolbar.setNavigationIcon(R.drawable.nomoregood_small);
 
         database_loadDatabase.setArrayList(context);
 
         //Get Intents
         Intent intent = getIntent();
         String position = intent.getStringExtra("position");
-
+        
 
         //set up navigation drawer buttons
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -74,24 +76,31 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
                 String title = (String) menuItem.getTitle();
                 if (title.equals("Add Quest")) {
                     changeaddquest();
+                    toolbar.setTitle("Add Quest!");
                 }
                 if (title.equals("Quest List")) {
-                    changeQuestList();
+//                    changeQuestList();
+                    changeQuestListRecyclerView();
+                    toolbar.setTitle("We are Volunteer!");
                 }
                 if (title.equals("My Account")) {
                     changeMyAccount();
+                    toolbar.setTitle("We are Volunteer!");
                 }
                 if (title.equals("zuyoChat!")) {
                     changezuyoChat();
+                    toolbar.setTitle("zuyoChat");
                 }
                 if (title.equals("Share")) {
                     changeShare();
                 }
                 if (title.equals("Setting")) {
                     changeSetting();
+                    toolbar.setTitle("Setting");
                 }
                 if (title.equals("Ranking")) {
                     changeRanking();
+                    toolbar.setTitle("Ranking");
                 }
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
