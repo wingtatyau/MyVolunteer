@@ -114,7 +114,9 @@
             android:layout_alignRight="@+id/infoedittext"
             android:layout_alignEnd="@+id/infoedittext"
             android:editable="false"
-            android:inputType="datetime" />
+            android:inputType="datetime"
+            android:autoText="false"
+            android:clickable="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -241,19 +243,6 @@
             android:layout_alignLeft="@+id/timerequireedhourittext"
             android:layout_alignStart="@+id/timerequireedhourittext" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/timerequiredminuteedittext"
-            android:maxLines="1"
-            android:layout_above="@+id/termofusecheckBox"
-            android:layout_alignRight="@+id/locationedittext"
-            android:layout_alignEnd="@+id/locationedittext"
-            android:layout_toEndOf="@+id/titletextview"
-            android:layout_toRightOf="@+id/titletextview"
-            android:text="MM"
-            android:inputType="time" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -268,6 +257,20 @@
             android:textSize= "24dp"
             android:textAlignment="center"
             />
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timerequiredminuteedittext"
+            android:maxLines="1"
+            android:layout_above="@+id/termofusecheckBox"
+            android:layout_alignRight="@+id/locationedittext"
+            android:layout_alignEnd="@+id/locationedittext"
+            android:layout_toEndOf="@+id/titletextview"
+            android:layout_toRightOf="@+id/titletextview"
+            android:text="MM"
+            android:inputType="time" />
 
     </RelativeLayout>
     </ScrollView>

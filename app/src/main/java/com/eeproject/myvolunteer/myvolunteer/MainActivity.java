@@ -27,9 +27,6 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
     //Setup context
     Context context = this;
 
-    //Define toolbar
-    Toolbar toolbar;
-
     //DrawerLayout define
     TextView contentView;
     DrawerLayout drawerLayout;
@@ -55,10 +52,8 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
             }
         }).start();
         helper.getDatabase(context);
+
         changeQuestListRecyclerView();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("We are Volunteer!");
-        toolbar.setNavigationIcon(R.drawable.nomoregood_small);
 
         database_loadDatabase.setArrayList(context);
 
@@ -76,31 +71,24 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
                 String title = (String) menuItem.getTitle();
                 if (title.equals("Add Quest")) {
                     changeaddquest();
-                    toolbar.setTitle("Add Quest!");
                 }
                 if (title.equals("Quest List")) {
-//                    changeQuestList();
                     changeQuestListRecyclerView();
-                    toolbar.setTitle("We are Volunteer!");
                 }
                 if (title.equals("My Account")) {
                     changeMyAccount();
-                    toolbar.setTitle("We are Volunteer!");
                 }
                 if (title.equals("zuyoChat!")) {
                     changezuyoChat();
-                    toolbar.setTitle("zuyoChat");
                 }
                 if (title.equals("Share")) {
                     changeShare();
                 }
                 if (title.equals("Setting")) {
                     changeSetting();
-                    toolbar.setTitle("Setting");
                 }
                 if (title.equals("Ranking")) {
                     changeRanking();
-                    toolbar.setTitle("Ranking");
                 }
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
@@ -149,6 +137,7 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
         fragment_Ranking fragment1 = new fragment_Ranking();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
+
 
     private void changeMyAccount() {
         fragment_MyAccount fragment1 = new fragment_MyAccount();

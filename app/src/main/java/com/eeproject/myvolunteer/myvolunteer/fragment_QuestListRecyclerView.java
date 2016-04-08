@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,8 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     Spinner catagoryspinner, languagespinner;
 
+    Toolbar toolbar;
+
 
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
@@ -50,6 +53,8 @@ public class fragment_QuestListRecyclerView extends Fragment {
         context = container.getContext();
         database_loadDatabase.setArrayList(context);
         //mQuest.add(new quest("1", "1", "1", "1", "1", "1", "1", "1", 1, 1, "1"));
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Quest List");
         setmRecyclerView(v);
         setlist(v);
         return v;
