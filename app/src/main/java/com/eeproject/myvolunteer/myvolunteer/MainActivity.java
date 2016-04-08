@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 import com.example.facedemo.facedemo.ChatActivity;
 import com.example.facedemo.facedemo.FaceConversionUtil;
 import com.firebase.client.Firebase;
+
+import java.io.FileNotFoundException;
 
 
 public class MainActivity extends Activity implements fragment_QuestList.PassValue {
@@ -190,4 +195,6 @@ public class MainActivity extends Activity implements fragment_QuestList.PassVal
         fragment1.updateInfo(position);
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
+
+
 }

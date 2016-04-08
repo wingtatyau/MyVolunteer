@@ -3,6 +3,8 @@ package com.eeproject.myvolunteer.myvolunteer;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -84,8 +86,12 @@ public class fragment_MyAccount extends Fragment {
         issueright.setText(" ");
         acceptleft.setText(user.getQuest_accepted());
         acceptright.setText(" ");
-        int id = getResources().getIdentifier(user.getIconpath(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
-        icon.setImageResource(id);
+
+        Bitmap temp = image_handler.decode(user.getIconpath());
+        Bitmap resized = Bitmap.createScaledBitmap(temp, 400, 400, true);
+        Bitmap conv_bm = Bitmap_factory.getRoundedRectBitmap(resized, 400);
+        icon.setImageBitmap(conv_bm);
+
 
     }
 

@@ -1,10 +1,15 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +27,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.io.FileNotFoundException;
+
 /**
  * Created by Chris on 11/18/15.
  */
@@ -31,6 +38,10 @@ public class fragment_Register extends Fragment{
 
     EditText firstName, lastName, organization;
     Button finish;
+
+    public static ImageView image;
+
+    public static Bitmap bitmap;
 
     public static user user;
 
@@ -47,8 +58,22 @@ public class fragment_Register extends Fragment{
     }
 
     public void init(View v){
-        ImageView image = (ImageView)v.findViewById(R.id.imageView);
-        image.setImageResource(R.drawable.loginlogo_white);
+        image = (ImageView)v.findViewById(R.id.imageView);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
+        bitmap = bm;
+        Bitmap resized = Bitmap.createScaledBitmap(bm, 400, 400, true);
+        Bitmap conv_bm = Bitmap_factory.getRoundedRectBitmap(resized, 400);
+        image.setImageBitmap(conv_bm);
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 0);
+            }
+        });
+
         firstName = (EditText) v.findViewById(R.id.firstNameEditText);
         lastName = (EditText) v.findViewById(R.id.lastNameEditText);
         organization = (EditText) v.findViewById(R.id.organizationEditText);
@@ -70,6 +95,27 @@ public class fragment_Register extends Fragment{
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK){
+            Uri targetUri = data.getData();
+            //textTargetUri.setText(targetUri.toString());
+            try {
+                Bitmap temp = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(targetUri));
+                bitmap = temp;
+                Bitmap resized = Bitmap.createScaledBitmap(temp, 400, 400, true);
+                Bitmap conv_bm = Bitmap_factory.getRoundedRectBitmap(resized, 400);
+                image.setImageBitmap(conv_bm);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
     //Perform the finish process
     public void finish(String First, String Last, String Organization){
 
@@ -80,6 +126,10 @@ public class fragment_Register extends Fragment{
         }else{
             user.setOrganization(Organization);
         }
+
+        //Setup the BASE64 image string
+        String imgfile = image_handler.encode(bitmap);
+        user.setIconpath(imgfile);
 
         Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
