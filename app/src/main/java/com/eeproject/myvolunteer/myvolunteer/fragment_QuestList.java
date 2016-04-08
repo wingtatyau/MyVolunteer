@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,8 @@ public class fragment_QuestList extends Fragment {
 
     ListView list;
 
+    Toolbar toolbar;
+
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
     public void resetList(){
@@ -69,6 +72,7 @@ public class fragment_QuestList extends Fragment {
         View v = inflater.inflate(R.layout.fragment_questlistfragment, null);
         context = container.getContext();
         database_loadDatabase.setArrayList(context);
+
         setlist(v);
         return v;
     }

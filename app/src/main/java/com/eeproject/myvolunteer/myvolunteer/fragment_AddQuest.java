@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ import java.util.List;
  */
 public class fragment_AddQuest extends Fragment {
     Context context;
+    Toolbar toolbar;
 
     //Setup timepicker
     final Calendar time = Calendar.getInstance();
@@ -70,6 +72,8 @@ public class fragment_AddQuest extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_addquest, null);
         context = container.getContext();
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Add Quest");
 //        helper = new DBHelper(context, DBHelper.DATABASE_NAME);
         addquest(v);
         return v;

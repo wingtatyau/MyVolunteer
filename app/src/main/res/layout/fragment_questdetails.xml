@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#f2f2f2">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -169,14 +170,7 @@
                 android:layout_marginRight="16dp"
                 android:id="@+id/view4" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ACCEPT QUEST"
-                android:id="@+id/acceptbutton"
-                android:layout_below="@+id/contact"
-                android:layout_alignRight="@+id/view4"
-                android:layout_alignEnd="@+id/view4" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -252,6 +246,19 @@
                 android:layout_alignStart="@+id/questissuetextview"
                 android:layout_alignRight="@+id/catatextview"
                 android:layout_alignEnd="@+id/catatextview" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:textColor ="#FFFFFF"
+                android:layout_marginTop="20dp"
+                android:text="ACCEPT QUEST"
+                android:background="@color/colorPrimaryDark"
+                android:id="@+id/acceptbutton"
+                android:layout_below="@+id/contact"
+                android:layout_alignRight="@+id/view4"
+                android:layout_alignEnd="@+id/view4"
+                android:layout_alignStart="@+id/contact" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

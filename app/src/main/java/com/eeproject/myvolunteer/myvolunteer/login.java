@@ -33,12 +33,8 @@ public class login extends Fragment{
     Context context;
 
     EditText username, password;
-    Button submit, register;
-    CheckBox rememberme;
-
-    SQLiteDatabase db;
-    DBHelper helper;
-    Cursor cursor;
+    TextView register;
+    Button submit;
 
     View drawer;
 
@@ -55,15 +51,11 @@ public class login extends Fragment{
 
     public void init(View v){
         ImageView image = (ImageView)v.findViewById(R.id.imageView2);
-        image.setImageResource(R.drawable.loginlogo);
+        image.setImageResource(R.drawable.loginlogo_white);
         username = (EditText) v.findViewById(R.id.emailedittext);
         password = (EditText) v.findViewById(R.id.passwordedittext);
         submit = (Button) v.findViewById(R.id.loginbutton);
-        register = (Button) v.findViewById(R.id.regtisterbutton);
-        rememberme = (CheckBox) v.findViewById(R.id.remembermecheckbox);
-
-
-
+        register = (TextView) v.findViewById(R.id.textView_register);
 
         // Clicked Login
         submit.setOnClickListener(new View.OnClickListener() {
@@ -156,10 +148,6 @@ public class login extends Fragment{
                     if (username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())) {
 
                         parameter.login.set(true);
-
-                        if(rememberme.isChecked()){
-                            parameter.remeberme.set(true);
-                        }
 
                         TextView displayusername = (TextView) drawer.findViewById(R.id.name);
                         displayusername.setText(username);

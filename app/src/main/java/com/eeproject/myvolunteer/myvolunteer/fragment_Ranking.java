@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,18 +36,22 @@ public class fragment_Ranking extends Fragment {
     ListAdapter1 adapter1;
     ListAdapter2 adapter2;
 
+    Toolbar toolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_ranking, null);
         context = container.getContext();
         helper = new DBHelper(context, DBHelper.DATABASE_NAME);
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Monthly Ranking");
         init(v);
         return v;
     }
 
     //Retrieve date from table
     private void init(View v) {
-        month = (TextView) v.findViewById(R.id.month);
+        //month = (TextView) v.findViewById(R.id.month);
         overall = (TextView) v.findViewById(R.id.overall);
        ListView monthList = (ListView) v.findViewById(R.id.monthList);
        ListView overallList = (ListView) v.findViewById(R.id.overallList);

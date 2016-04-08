@@ -1,13 +1,16 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,91 +35,114 @@ import java.util.Locale;
  */
 public class fragment_Chat extends Fragment {
     Context context;
-    TextView contact_List;
-    ListAdapter1 adapter1;
+    ListAdapter adapter;
     TextView chatt_username, user_mail;
-    Button chatbtn;
-    TextView testing;
+    ImageView chatt_imageView;
+    List<String> sortedName = new ArrayList<>();
+    List<String> sortedEmail = new ArrayList<>();
+    List<String> sortedIcon = new ArrayList<>();
+    List<Integer> originalposition = new ArrayList<>();
 
+    ListView list;
 
-    Firebase ref = new Firebase("https://blistering-fire-9077.firebaseio.com/android/User");
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
     private void changepage()
     {
-        ChatActivity fragment1 = new ChatActivity();
+        ChatActivity fragment1 = new  ChatActivity();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.chatt_select, null);
         context = container.getContext();
-        init(v);
+        setlist(v);
         return v;
     }
 
 
-    private void init(View v)
-    {
-        contact_List = (TextView) v.findViewById(R.id.contact_List);
-        chatbtn = (Button) v.findViewById(R.id.BtnChat);
-        ListView PChating_List = (ListView) v.findViewById(R.id.PChating_List);
+    public void setlist(final View v) {
 
-        adapter1 = new ListAdapter1(context);
-        adapter1.notifyDataSetChanged();
-        PChating_List.setAdapter(adapter1);
+        final String ACTIVITY_TAG="LogDemo";
 
-        chatbtn.setOnClickListener(new View.OnClickListener() {
+        list = (ListView) v.findViewById(R.id.PChating_List);
+
+        adapter = new ListAdapter(context);
+        adapter.notifyDataSetChanged();
+        list.setAdapter(adapter);
+
+        rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() > 0) {
+
+                    int index = 0;
+                    for (DataSnapshot usersnapshot : dataSnapshot.getChildren()) {
+                        user user = usersnapshot.getValue(user.class);
+                        sortedIcon.add(user.getIconpath());
+                        sortedName.add(user.getFirstname());
+                        sortedEmail.add(user.getUsername());
+                        originalposition.add(index++);
+                    }
+
+                    adapter.notifyDataSetChanged();
+                } else
+                    Log.v(ACTIVITY_TAG, "Cant work for reading");
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 changepage();
             }
         });
     }
 
-    public class ListAdapter1 extends BaseAdapter {
+    public class ListAdapter extends BaseAdapter {
         private LayoutInflater ListInflater;
 
-        public ListAdapter1(Context c)
-        {
+        public ListAdapter(Context c) {
             ListInflater = LayoutInflater.from(c);
         }
 
         @Override
-        public int getCount()
-        {
-            return 1;
+        public int getCount() {
+            return sortedName.size();
         }
 
         @Override
-        public Object getItem(int position)
-        {
+        public Object getItem(int position) {
+            return sortedName.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
             return position;
         }
 
         @Override
-        public long getItemId(int position)
-        {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent)
-        {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = ListInflater.inflate(R.layout.chatt_item, null);
 
-            chatt_username = (TextView)convertView.findViewById(R.id.chatt_username);
-            user_mail = (TextView)convertView.findViewById(R.id.user_mail);
+            chatt_username = (TextView) convertView.findViewById(R.id.chatt_username);
+            user_mail = (TextView) convertView.findViewById(R.id.user_mail);
+            chatt_imageView = (ImageView) convertView.findViewById(R.id.chatt_imageView);
 
-            chatt_username.setText("Ricky Lau");
-            user_mail.setText("drlau@cityu.com");
+            chatt_username.setText(sortedName.get(sortedName.size() - position - 1));
+            user_mail.setText(sortedEmail.get(sortedName.size() - position - 1));
 
+            int id = getResources().getIdentifier(sortedIcon.get(sortedName.size() - position - 1), "drawable", "com.eeproject.myvolunteer.myvolunteer");
+            chatt_imageView.setImageResource(id);
 
             return convertView;
         }
+
     }
-
-
-
 }

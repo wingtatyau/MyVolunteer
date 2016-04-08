@@ -1,12 +1,16 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -16,6 +20,8 @@ public class fragment_MyAccount extends Fragment {
     Context context;
 
     ImageView icon;
+    Toolbar toolbar;
+    RelativeLayout relativelayout;
     TextView name, organization, contacttextview, contactleft, contactright, questissuetextview, issueleft,
             issueright, questaccepttextview, acceptleft, acceptright;
     user user;
@@ -29,6 +35,9 @@ public class fragment_MyAccount extends Fragment {
         View v = inflater.inflate(R.layout.fragment_myaccount, null);
         context = container.getContext();
 
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Profile");
+
         //Initialize the boolean, if login-ed, changed to true;
 
         init(v);
@@ -38,12 +47,13 @@ public class fragment_MyAccount extends Fragment {
     public void init(View v) {
         if(parameter.login.get() == false) {
             login fragment1 = new login();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.activity_main, null);
+            //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            //View view = inflater.inflate(R.layout.activity_main, null);
+            getActivity().getFragmentManager().beginTransaction().remove(this).commit();
             getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
         }else{
             //perform displaying actions
-
+            relativelayout = (RelativeLayout) v.findViewById(R.id.relativelayout);
             icon = (ImageView) v.findViewById(R.id.icon);
             name = (TextView) v.findViewById(R.id.nameA);
             organization = (TextView) v.findViewById(R.id.organization);
