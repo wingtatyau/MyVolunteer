@@ -3,6 +3,7 @@ package com.eeproject.myvolunteer.myvolunteer;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class ChattActivity extends ActionBarActivity implements View.OnClickListener,
+public class ChattActivity extends FragmentActivity implements View.OnClickListener,
         MessageDataSource.MessagesCallbacks{
 
     public static final String USER_EXTRA = "USER";
@@ -48,9 +49,6 @@ public class ChattActivity extends ActionBarActivity implements View.OnClickList
         mListView.setAdapter(mAdapter);
 
         setTitle(mRecipient);
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         Button sendMessage = (Button)findViewById(R.id.send_message);
         sendMessage.setOnClickListener(this);
