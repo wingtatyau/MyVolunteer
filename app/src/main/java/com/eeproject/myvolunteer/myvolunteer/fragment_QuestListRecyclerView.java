@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -44,6 +46,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     Toolbar toolbar;
 
+    PassValue passvalue;
 
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
@@ -58,6 +61,23 @@ public class fragment_QuestListRecyclerView extends Fragment {
         setmRecyclerView(v);
         setlist(v);
         return v;
+    }
+
+    //Interface
+    public interface PassValue {
+        public void setPosition(int position);
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            passvalue = (PassValue) activity;
+        } catch (Exception e) {
+            Log.d("Unable to pass position", null);
+        }
+
     }
 
     //Set up list
@@ -92,21 +112,31 @@ public class fragment_QuestListRecyclerView extends Fragment {
         
         ArrayAdapter<String> langadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.language);
         languagespinner.setAdapter(langadapter);
-        languagespinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener()
-        {
+        languagespinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 parameter.sLanguage = parent.getSelectedItem().toString();
                 regeneratelist();
             }
-        
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-        
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        // do whatever
+                        Log.v("Clicked Item", String.valueOf(position));
+
+                        passvalue.setPosition(position);
+                        Log.d("Position passed", String.valueOf(position));
+                    }
+                })
+        );
 
         rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -143,9 +173,9 @@ public class fragment_QuestListRecyclerView extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-    
+
                 mQuest.clear();
-    
+
                 if (dataSnapshot.getChildrenCount() > 0)
                 {
                     int index = 0;
@@ -169,14 +199,14 @@ public class fragment_QuestListRecyclerView extends Fragment {
                     mAdapter.notifyDataSetChanged();
                 }
             }
-    
+
             @Override
             public void onCancelled (FirebaseError firebaseError)
             {
-    
+
             }
         }
-    
+
         );
     
     }
@@ -195,4 +225,8 @@ public class fragment_QuestListRecyclerView extends Fragment {
         mAdapter = new adapter_QuestListRecyclerView(mQuest);
         mRecyclerView.setAdapter(mAdapter);
     }
+
+
+
 }
+

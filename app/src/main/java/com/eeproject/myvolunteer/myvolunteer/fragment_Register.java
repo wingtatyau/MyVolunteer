@@ -59,7 +59,7 @@ public class fragment_Register extends Fragment{
 
     public void init(View v){
         image = (ImageView)v.findViewById(R.id.imageView);
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.nomorehehe);
         bitmap = bm;
         Bitmap resized = Bitmap.createScaledBitmap(bm, 400, 400, true);
         Bitmap conv_bm = Bitmap_factory.getRoundedRectBitmap(resized, 400);

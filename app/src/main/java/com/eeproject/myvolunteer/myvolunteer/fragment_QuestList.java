@@ -147,8 +147,8 @@ public class fragment_QuestList extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                passvalue.setPosition(position);
-                Log.d("Position passed", String.valueOf(position));
+                passvalue.setPosition(position+1);
+                Log.d("Position passed", String.valueOf(position+1));
             }
         });
 

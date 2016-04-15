@@ -28,7 +28,7 @@ import com.firebase.client.Firebase;
 import java.io.FileNotFoundException;
 
 
-public class MainActivity extends Activity implements fragment_QuestList.PassValue {
+public class MainActivity extends Activity implements fragment_QuestListRecyclerView.PassValue {
     //Setup context
     Context context = this;
 
