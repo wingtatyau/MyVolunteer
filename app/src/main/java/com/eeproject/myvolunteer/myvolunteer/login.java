@@ -138,6 +138,8 @@ public class login extends Fragment{
     //Perform the login process
     public void login(final String username, final String password){
 
+        Log.v("login.java", "Perform the login process");
+
         rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {

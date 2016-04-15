@@ -101,34 +101,46 @@ public class fragment_QuestDetails extends Fragment {
 //                });
 //
 
-                rootRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        int newParti = dataSnapshot.child("currentparti").getValue(Integer.class) + 1;
+                if(parameter.login.get() == false){
+                    Toast.makeText(context, "Please Login!", Toast.LENGTH_LONG).show();
+                    login f1 = new login();
+                    getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
 
-                        rootRef.child(key).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
-                            @Override
-                            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                                if (firebaseError != null) {
-                                    System.out.println("Data could not be saved. " + firebaseError.getMessage());
-                                    Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    System.out.println("Data saved successfully.");
+                }else {
 
-                                    getinformation();
-                                    Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
+
+                    rootRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            int newParti = dataSnapshot.child("currentparti").getValue(Integer.class) + 1;
+
+                            rootRef.child(key).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
+                                @Override
+                                public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                    if (firebaseError != null) {
+                                        System.out.println("Data could not be saved. " + firebaseError.getMessage());
+                                        Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        System.out.println("Data saved successfully.");
+
+                                        getinformation();
+                                        Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                    }
+                        }
 
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
 
-                    }
-                });
+                        }
+                    });
+
+                }
+
 
             }
         });

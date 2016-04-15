@@ -2,6 +2,7 @@ package com.eeproject.myvolunteer.myvolunteer;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -49,13 +50,17 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     PassValue passvalue;
 
+    boolean loading;
+
+    ProgressDialog dialog;
+
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_questlistrecyclerview, null);
         context = container.getContext();
-        database_loadDatabase.setArrayList(context);
+        //database_loadDatabase.setArrayList(context);
         //mQuest.add(new quest("1", "1", "1", "1", "1", "1", "1", "1", 1, 1, "1"));
         toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         toolbar.setTitle("Quest List");
@@ -84,6 +89,9 @@ public class fragment_QuestListRecyclerView extends Fragment {
     //Set up list
     public void setlist(final View v) {
 
+        loading = true;
+        Log.v("Loading", String.valueOf(loading));
+
         catagoryspinner = (Spinner) v.findViewById(R.id.catspinner);
         languagespinner = (Spinner) v.findViewById(R.id.langspinner);
         
@@ -95,19 +103,16 @@ public class fragment_QuestListRecyclerView extends Fragment {
         
         ArrayAdapter<String> catadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.catagory);
         catagoryspinner.setAdapter(catadapter);
-        catagoryspinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener()
-        {
+        catagoryspinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 parameter.sCatagory = parent.getSelectedItem().toString();
                 regeneratelist();
             }
-        
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-        
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         
@@ -139,6 +144,23 @@ public class fragment_QuestListRecyclerView extends Fragment {
                 })
         );
 
+        dialog = ProgressDialog.show(context,
+                "Loading", "Please wait...",true);
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    while (loading);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+                finally{
+                    dialog.dismiss();
+                }
+            }
+        }).start();
+
         rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -155,6 +177,9 @@ public class fragment_QuestListRecyclerView extends Fragment {
                 Log.d("mQuest", "Add fail");
 
                 mAdapter.notifyDataSetChanged();
+                loading = false;
+                Log.v("Loading", String.valueOf(loading));
+
             }
 
             @Override
