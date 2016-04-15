@@ -54,6 +54,9 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     ProgressDialog dialog;
 
+    boolean firstCat = true;
+    boolean firstLan = true;
+
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
 
     @Override
@@ -103,11 +106,15 @@ public class fragment_QuestListRecyclerView extends Fragment {
         
         ArrayAdapter<String> catadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.catagory);
         catagoryspinner.setAdapter(catadapter);
+
         catagoryspinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                parameter.sCatagory = parent.getSelectedItem().toString();
-                regeneratelist();
+                if (!firstCat) {
+                    parameter.sCatagory = parent.getSelectedItem().toString();
+                    regeneratelist();
+                }
+                firstCat = false;
             }
 
             @Override
@@ -121,8 +128,11 @@ public class fragment_QuestListRecyclerView extends Fragment {
         languagespinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                parameter.sLanguage = parent.getSelectedItem().toString();
-                regeneratelist();
+                if(!firstLan) {
+                    parameter.sLanguage = parent.getSelectedItem().toString();
+                    regeneratelist();
+                }
+                firstLan = false;
             }
 
             @Override
@@ -192,7 +202,25 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     private void regeneratelist()
     {
-    
+        loading = true;
+
+        dialog = ProgressDialog.show(context,
+                "Loading", "Please wait...",true);
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    while (loading);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+                finally{
+                    dialog.dismiss();
+                }
+            }
+        }).start();
+
         Log.v("Inside sCatagory", parameter.sCatagory);
         Log.v("Inside sLanguage", parameter.sLanguage);
     
@@ -225,6 +253,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
                         }
                     }
                     mAdapter.notifyDataSetChanged();
+                    loading = false;
                 }
             }
 
