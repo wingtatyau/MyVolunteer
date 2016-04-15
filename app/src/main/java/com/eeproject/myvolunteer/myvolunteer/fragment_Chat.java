@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,13 +44,14 @@ public class fragment_Chat extends Fragment {
     List<String> sortedIcon = new ArrayList<>();
     List<Integer> originalposition = new ArrayList<>();
 
+    Toolbar toolbar;
     ListView list;
 
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
     private void changepage()
     {
-        ChatActivity fragment1 = new  ChatActivity();
+        ChattActivity fragment1 = new  ChattActivity();
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
     }
 
@@ -57,6 +59,8 @@ public class fragment_Chat extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.chatt_select, null);
         context = container.getContext();
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Contact List");
         setlist(v);
         return v;
     }

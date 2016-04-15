@@ -1,11 +1,17 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
 import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,56 +27,73 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class ChattActivity extends FragmentActivity implements View.OnClickListener,
+public class ChattActivity extends Fragment implements View.OnClickListener,
         MessageDataSource.MessagesCallbacks{
 
     public static final String USER_EXTRA = "USER";
 
     public static final String TAG = "ChatActivity";
-
+    Context context;
+    Button sendMessage;
+    String newMessage;
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
     private String mRecipient;
     private ListView mListView;
+    private EditText newMessageView;
     private Date mLastMessageDate = new Date();
     private String mConvoId;
     private MessageDataSource.MessagesListener mListener;
+    final String ACTIVITY_TAG="LogDemo";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private Toolbar toolbar;
+
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mian);
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_mian, null);
+        initView(v);
+        return v;
+    }
+
+    public void initView(View v) {
         mRecipient = "Ashok";
 
-        mListView = (ListView)findViewById(R.id.messages_list);
+        mListView = (ListView)v.findViewById(R.id.messages_list);
+        mListView.setAdapter(mAdapter);
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
         mListView.setAdapter(mAdapter);
+        newMessageView = (EditText) v.findViewById(R.id.new_message);
 
-        setTitle(mRecipient);
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle(mRecipient);
 
-        Button sendMessage = (Button)findViewById(R.id.send_message);
+        sendMessage = (Button)v.findViewById(R.id.send_message);
         sendMessage.setOnClickListener(this);
 
-        String[] ids = {"Ajay","-", "Ashok"};
+        String[] ids = {"Ashok","-", "Ajay"};
         Arrays.sort(ids);
         mConvoId = ids[0]+ids[1]+ids[2];
 
         mListener = MessageDataSource.addMessagesListener(mConvoId, this);
-
     }
 
-    public void onClick(View v) {
-        EditText newMessageView = (EditText)findViewById(R.id.new_message);
-        String newMessage = newMessageView.getText().toString();
-        newMessageView.setText("");
-        Message msg = new Message();
-        msg.setDate(new Date());
-        msg.setText(newMessage);
-        msg.setSender("Ashok");
+    public void onClick(View v)
+    {
+                newMessage = newMessageView.getText().toString();
+                Log.v(ACTIVITY_TAG, newMessage + "dummy");
+                newMessageView.setText("");
+                Message msg = new Message();
+                msg.setDate(new Date());
+                msg.setText(newMessage);
+                msg.setSender("Ajay");
 
-        MessageDataSource.saveMessage(msg, mConvoId);
+                MessageDataSource.saveMessage(msg, mConvoId);
     }
 
     @Override
@@ -80,7 +103,7 @@ public class ChattActivity extends FragmentActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         MessageDataSource.stop(mListener);
     }
@@ -88,9 +111,8 @@ public class ChattActivity extends FragmentActivity implements View.OnClickListe
 
     private class MessagesAdapter extends ArrayAdapter<Message> {
         MessagesAdapter(ArrayList<Message> messages){
-            super(ChattActivity.this, R.layout.message, R.id.message, messages);
+            super(getActivity(), R.layout.message, R.id.message, messages);
         }
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = super.getView(position, convertView, parent);
@@ -104,18 +126,18 @@ public class ChattActivity extends FragmentActivity implements View.OnClickListe
             int sdk = Build.VERSION.SDK_INT;
             if (message.getSender().equals("Ashok")){
                 if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
-                    nameView.setBackground(getDrawable(R.drawable.bubble_right_green));
+                    nameView.setBackground(getResources().getDrawable(R.drawable.bubble_left_gray));
                 } else{
-                    nameView.setBackgroundDrawable(getDrawable(R.drawable.bubble_right_green));
-                }
-                layoutParams.gravity = Gravity.RIGHT;
-            }else{
-                if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
-                    nameView.setBackground(getDrawable(R.drawable.bubble_left_gray));
-                } else{
-                    nameView.setBackgroundDrawable(getDrawable(R.drawable.bubble_left_gray));
+                    nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble_left_gray));
                 }
                 layoutParams.gravity = Gravity.LEFT;
+            }else{
+                if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
+                    nameView.setBackground(getResources().getDrawable(R.drawable.bubble_right_green));
+                } else{
+                    nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble_right_green));
+                }
+                layoutParams.gravity = Gravity.RIGHT;
             }
 
             nameView.setLayoutParams(layoutParams);
