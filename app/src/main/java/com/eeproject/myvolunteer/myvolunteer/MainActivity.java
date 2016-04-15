@@ -190,9 +190,9 @@ public class MainActivity extends Activity implements fragment_QuestListRecycler
     }
 
     @Override
-    public void setPosition(int position) {
+    public void setKey(String key) {
         fragment_QuestDetails fragment1 = new fragment_QuestDetails();
-        fragment1.updateInfo(position);
+        fragment1.updateInfo(key);
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();
     }
 

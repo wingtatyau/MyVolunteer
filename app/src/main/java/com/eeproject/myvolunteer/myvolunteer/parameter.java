@@ -1,5 +1,7 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -19,6 +21,8 @@ public class parameter {
     public static int userID;
     public static String sCatagory;
     public static String sLanguage;
+
+    public static List<quest> list = new ArrayList<>();
 
     public static void setUserID(String user){
         for(int i = 0; i < database_loadDatabase.usernamelist.size(); i++) {

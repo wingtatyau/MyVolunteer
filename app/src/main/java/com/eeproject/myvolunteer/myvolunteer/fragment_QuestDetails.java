@@ -35,10 +35,10 @@ public class fragment_QuestDetails extends Fragment {
     Button accept;
     ImageView icon;
 
-    //position value
-    int position;
+    //key value
+    String key;
 
-    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
 
 
     @Override
@@ -46,7 +46,7 @@ public class fragment_QuestDetails extends Fragment {
         View v = inflater.inflate(R.layout.fragment_questdetails, null); //Create quest details layout
         context = container.getContext();
         init(v);
-        database_loadDatabase.setArrayList(context);
+        //database_loadDatabase.setArrayList(context);
         return v;
     }
 
@@ -100,44 +100,70 @@ public class fragment_QuestDetails extends Fragment {
 //                    }
 //                });
 //
-//                rootRef.child("Quest").child("currentparti").setValue();
 
-                getinformation();
-                Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
+                rootRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        int newParti = dataSnapshot.child("currentparti").getValue(Integer.class) + 1;
+
+                        rootRef.child(key).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
+                            @Override
+                            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                if (firebaseError != null) {
+                                    System.out.println("Data could not be saved. " + firebaseError.getMessage());
+                                    Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    System.out.println("Data saved successfully.");
+
+                                    getinformation();
+                                    Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
             }
         });
         getinformation();
     }
 
-    public void updateInfo(int position){
-        this.position = position;
+    public void updateInfo(String key){
+        this.key = key;
     }
 
-    public int getPosition(){
-        return position;
+    public String getKey(){
+        return key;
     }
 
     public void getinformation(){
 
-        Log.d("Position received", String.valueOf(position));
+        Log.d("Key received", key);
 
-        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
+        rootRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() > 0) {
+                //if (dataSnapshot.getChildrenCount() > 0) {
 
-                    // Reverse order
-                    int tempPosition = 0;
-
-                    for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
-                        quest quest = questsnapshot.getValue(quest.class);
-
-                        Log.v("TPosition", String.valueOf(tempPosition));
-                        Log.v("TQuest Name", quest.getTitle());
-                        Log.v("Position", String.valueOf(position));
-                        Log.v("Number of Children", String.valueOf(dataSnapshot.getChildrenCount()));
-
-                        if(tempPosition == (dataSnapshot.getChildrenCount() - position - 1)) {
+//                    // Reverse order
+//                    int tempPosition = 0;
+//
+//                    for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
+                        quest quest = dataSnapshot.getValue(quest.class);
+//
+//                        Log.v("TPosition", String.valueOf(tempPosition));
+//                        Log.v("TQuest Name", quest.getTitle());
+//                        Log.v("Key", key);
+//                        Log.v("Number of Children", String.valueOf(dataSnapshot.getChildrenCount()));
+//
+//                        if(questsnapshot.getKey() == key) {
 
                             Log.v("TP=0", "printed");
 
@@ -159,15 +185,15 @@ public class fragment_QuestDetails extends Fragment {
                             int id = getResources().getIdentifier(quest.getIcon(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
                             icon.setImageResource(id);
 
-                            tempPosition++;
+//                            tempPosition++;
 
-                        }
-                        else if(tempPosition < (dataSnapshot.getChildrenCount() - position - 1)) tempPosition++;
-                        else break;
+                        //}
+                        //else if(tempPosition < (dataSnapshot.getChildrenCount() - position - 1)) tempPosition++;
+                        //else break;
 
-                    }
-
-                }
+//                    }
+//
+//                }
             }
 
             @Override

@@ -36,6 +36,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     //Define for list view
     List<quest> mQuest = new ArrayList<>();
+    List<String> keyList = new ArrayList<>();
 
     //Recycler View adapter
     RecyclerView mRecyclerView;
@@ -48,7 +49,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     PassValue passvalue;
 
-    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     //Interface
     public interface PassValue {
-        public void setPosition(int position);
+        public void setKey(String key);
     }
 
 
@@ -75,7 +76,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
         try {
             passvalue = (PassValue) activity;
         } catch (Exception e) {
-            Log.d("Unable to pass position", null);
+            Log.d("Unable to pass key", null);
         }
 
     }
@@ -132,13 +133,13 @@ public class fragment_QuestListRecyclerView extends Fragment {
                         // do whatever
                         Log.v("Clicked Item", String.valueOf(position));
 
-                        passvalue.setPosition(position);
-                        Log.d("Position passed", String.valueOf(position));
+                        passvalue.setKey(keyList.get(position));
+                        Log.d("Position passed", keyList.get(position));
                     }
                 })
         );
 
-        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) {
@@ -146,7 +147,9 @@ public class fragment_QuestListRecyclerView extends Fragment {
                     for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
                         quest quest = questsnapshot.getValue(quest.class);
                         mQuest.add(quest);
+                        keyList.add(questsnapshot.getKey());
                         Log.d("mQuest", "Add success");
+                        Log.d("keyList", questsnapshot.getKey());
                     }
                 }
                 Log.d("mQuest", "Add fail");
@@ -168,7 +171,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
         Log.v("Inside sCatagory", parameter.sCatagory);
         Log.v("Inside sLanguage", parameter.sLanguage);
     
-        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener()
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
