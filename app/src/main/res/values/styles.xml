@@ -36,6 +36,12 @@
         <item name="android:background">@drawable/chat_send_time_bg</item>
     </style>
 
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <item name="colorAccent">@color/colorPrimary</item>
+    <item name="android:textColorPrimary">#000000</item>
+    <item name="android:background">#f2f2f2</item>
+    </style>
+
     <style name="item_text_info" parent="android:Widget.TextView">
         <item name="android:textColor">@color/normal_text</item>
         <item name="android:textSize">11sp</item>

@@ -4,7 +4,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +38,8 @@ public class fragment_QuestDetails extends Fragment {
     ImageView icon;
 
     //key value
-    String key;
+    positionandkey pak;
+    Toolbar toolbar;
 
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
 
@@ -59,6 +62,9 @@ public class fragment_QuestDetails extends Fragment {
         situationleft = (TextView) v.findViewById(R.id.situationleft);
         detailsleft = (TextView) v.findViewById(R.id.detailsleft);
         icon = (ImageView) v.findViewById(R.id.icon);
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+
+        toolbar.setTitle("Quests Details");
         //commented by Tat
         //detailsright = (TextView) v.findViewById(R.id.detailsright);
         location = (TextView) v.findViewById(R.id.location);
@@ -74,34 +80,6 @@ public class fragment_QuestDetails extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //log to database
-//                database_writeDatabase.updatetable(context, DBHelper.TABLE_NAME, DBHelper.QUEST_CURRENT_PARTI, position+1, (database_loadDatabase.questcurrentpartilist.get(position)+1));
-//
-//                database_loadDatabase.setArrayList(context);
-
-//                rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        if (dataSnapshot.getChildrenCount() > 0) {
-//
-//                            for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
-//                                quest quest = questsnapshot.getValue(quest.class);
-//
-//
-//
-//                            }
-//
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(FirebaseError firebaseError) {
-//
-//                    }
-//                });
-//
-
-
                 if(parameter.login.get() == false){
                     Toast.makeText(context, "Please Login!", Toast.LENGTH_LONG).show();
                     login f1 = new login();
@@ -110,13 +88,13 @@ public class fragment_QuestDetails extends Fragment {
                 }else {
 
 
-                    rootRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    rootRef.child(pak.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             int newParti = dataSnapshot.child("currentparti").getValue(Integer.class) + 1;
 
-                            rootRef.child(key).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
+                            rootRef.child(pak.getKey()).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
                                 @Override
                                 public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                                     if (firebaseError != null) {
@@ -132,80 +110,50 @@ public class fragment_QuestDetails extends Fragment {
                             });
 
                         }
-
                         @Override
                         public void onCancelled(FirebaseError firebaseError) {
 
                         }
                     });
-
                 }
-
-
             }
         });
         getinformation();
     }
 
-    public void updateInfo(String key){
-        this.key = key;
+    public void updateInfo(positionandkey pak){
+        this.pak = pak;
     }
 
-    public String getKey(){
-        return key;
-    }
 
     public void getinformation(){
 
-        Log.d("Key received", key);
+        Log.d("Key received", pak.getKey());
+        quest quest = parameter.list.get(pak.getPosition());
 
-        rootRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+        name.setText(quest.getTitle());
+        expirydate.setText("Expiry Date: " + quest.getExpirydate());
+        situationleft.setText("Number of participants");
+        detailsleft.setText(quest.getInfo());
+        location.setText(quest.getLocation());
+        contact.setText(quest.getUser());
+        catagorytextview.setText(quest.getCatagory());
+        languagetextview.setText(quest.getRequiredLanguage());
+        durationtextview.setText("Duration");
+        actualduration.setText(quest.getRequiredTime());
+        situaitonright.setText(String.valueOf(quest.getPartinumber() + "/" + parameter.list.get(pak.getPosition()).getPartinumber()));
+
+
+        Bitmap bitmap;
+        bitmap = image_handler.decode(quest.getIcon());
+        icon.setImageBitmap(bitmap);
+
+        rootRef.child(pak.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //if (dataSnapshot.getChildrenCount() > 0) {
-
-//                    // Reverse order
-//                    int tempPosition = 0;
-//
-//                    for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
-                        quest quest = dataSnapshot.getValue(quest.class);
-//
-//                        Log.v("TPosition", String.valueOf(tempPosition));
-//                        Log.v("TQuest Name", quest.getTitle());
-//                        Log.v("Key", key);
-//                        Log.v("Number of Children", String.valueOf(dataSnapshot.getChildrenCount()));
-//
-//                        if(questsnapshot.getKey() == key) {
-
-                            Log.v("TP=0", "printed");
-
-                            name.setText(quest.getTitle());
-                            expirydate.setText("Expiry Date: " + quest.getExpirydate());
-
-                            situationleft.setText("Number of participants");
-                            situaitonright.setText(quest.getCurrentparti() + "/" + quest.getPartinumber());
-
-                            detailsleft.setText(quest.getInfo());
-
-                            location.setText(quest.getLocation());
-                            contact.setText(quest.getUser());
-                            catagorytextview.setText(quest.getCatagory());
-                            languagetextview.setText(quest.getRequiredLanguage());
-                            durationtextview.setText("Duration");
-                            actualduration.setText(quest.getRequiredTime());
-
-                            int id = getResources().getIdentifier(quest.getIcon(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
-                            icon.setImageResource(id);
-
-//                            tempPosition++;
-
-                        //}
-                        //else if(tempPosition < (dataSnapshot.getChildrenCount() - position - 1)) tempPosition++;
-                        //else break;
-
-//                    }
-//
-//                }
+                Log.v("TP=0", "printed");
+                situaitonright.setText(String.valueOf(dataSnapshot.child("currentparti").getValue(Integer.class)) + "/" + parameter.list.get(pak.getPosition()).getPartinumber());
+                Log.d("finish snapshot", String.valueOf(dataSnapshot.child("currentparti").getValue(Integer.class)));
             }
 
             @Override

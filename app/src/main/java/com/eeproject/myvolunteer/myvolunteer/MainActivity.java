@@ -123,7 +123,7 @@ public class MainActivity extends Activity implements fragment_QuestListRecycler
             getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
 
         }else {
-            fragment_AddQuest fragment1 = new fragment_AddQuest();
+            fragment_AddQuestMaterial fragment1 = new fragment_AddQuestMaterial();
             getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
         }
     }
@@ -190,7 +190,7 @@ public class MainActivity extends Activity implements fragment_QuestListRecycler
     }
 
     @Override
-    public void setKey(String key) {
+    public void setKey(positionandkey key) {
         fragment_QuestDetails fragment1 = new fragment_QuestDetails();
         fragment1.updateInfo(key);
         getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).addToBackStack(null).commit();

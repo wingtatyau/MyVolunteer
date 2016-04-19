@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -74,7 +70,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     //Interface
     public interface PassValue {
-        public void setKey(String key);
+        public void setKey(positionandkey key);
     }
 
 
@@ -128,7 +124,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
         languagespinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!firstLan) {
+                if (!firstLan) {
                     parameter.sLanguage = parent.getSelectedItem().toString();
                     regeneratelist();
                 }
@@ -148,14 +144,19 @@ public class fragment_QuestListRecyclerView extends Fragment {
                         // do whatever
                         Log.v("Clicked Item", String.valueOf(position));
 
-                        passvalue.setKey(keyList.get(position));
-                        Log.d("Position passed", keyList.get(position));
+                        positionandkey pak = new positionandkey(keyList.get(position), position);
+                        passvalue.setKey(pak);
+                        Log.d("Key passed", keyList.get(position));
+                        Log.d("Position passed", String.valueOf(position));
                     }
                 })
         );
-
-        dialog = ProgressDialog.show(context,
-                "Loading", "Please wait...",true);
+        dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setTitle("Loading");
+        dialog.setMessage("Please Wait... Our monkeys are grabbing data down...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -183,9 +184,10 @@ public class fragment_QuestListRecyclerView extends Fragment {
                         Log.d("mQuest", "Add success");
                         Log.d("keyList", questsnapshot.getKey());
                     }
+                    parameter.list = mQuest;
+                }else {
+                    Log.d("mQuest", "Add fail");
                 }
-                Log.d("mQuest", "Add fail");
-
                 mAdapter.notifyDataSetChanged();
                 loading = false;
                 Log.v("Loading", String.valueOf(loading));
@@ -204,8 +206,12 @@ public class fragment_QuestListRecyclerView extends Fragment {
     {
         loading = true;
 
-        dialog = ProgressDialog.show(context,
-                "Loading", "Please wait...",true);
+        dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setTitle("Loading");
+        dialog.setMessage("Please Wait... Our monkeys are grabbing data down...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -253,6 +259,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
                         }
                     }
                     mAdapter.notifyDataSetChanged();
+                    parameter.list = mQuest;
                     loading = false;
                 }
             }
