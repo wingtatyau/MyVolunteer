@@ -141,7 +141,7 @@ public class fragment_QuestDetails extends Fragment {
         languagetextview.setText(quest.getRequiredLanguage());
         durationtextview.setText("Duration");
         actualduration.setText(quest.getRequiredTime());
-        situaitonright.setText(String.valueOf(quest.getPartinumber() + "/" + parameter.list.get(pak.getPosition()).getPartinumber()));
+        situaitonright.setText(String.valueOf(quest.getCurrentparti() + "/" + parameter.list.get(pak.getPosition()).getPartinumber()));
 
 
         Bitmap bitmap;
