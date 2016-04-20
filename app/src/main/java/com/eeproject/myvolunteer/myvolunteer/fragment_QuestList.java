@@ -88,9 +88,8 @@ public class fragment_QuestList extends Fragment {
         try {
             passvalue = (PassValue) activity;
         } catch (Exception e) {
-            Log.d("Unable to pass position", null);
+            Log.d("Unable to pass position", "false");
         }
-
     }
 
     //Set up list

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +47,8 @@ public class ChattActivity extends Fragment implements View.OnClickListener,
     private MessageDataSource.MessagesListener mListener;
     final String ACTIVITY_TAG="LogDemo";
 
+    Toolbar toolbar;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //		setContentView(R.layout.layout_chat);
@@ -56,6 +59,7 @@ public class ChattActivity extends Fragment implements View.OnClickListener,
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_mian, null);
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         initView(v);
 
         return v;
@@ -63,7 +67,7 @@ public class ChattActivity extends Fragment implements View.OnClickListener,
 
     public void initView(View v) {
         mRecipient = fragment_Chat.chat_receiver;
-
+        toolbar.setTitle(mRecipient);
         mListView = (ListView)v.findViewById(R.id.messages_list);
         mListView.setAdapter(mAdapter);
         mMessages = new ArrayList<>();

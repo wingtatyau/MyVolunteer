@@ -47,6 +47,7 @@
                 android:layout_alignStart="@id/firstName"
                 android:layout_below="@id/firstName"
                 android:layout_marginRight="10dp"
+                android:color = "#FFFFFF"
                 android:ems="10"
                 android:inputType="text" />
 
@@ -69,6 +70,7 @@
                 android:layout_alignStart="@id/lastName"
                 android:layout_below="@id/lastName"
                 android:layout_marginRight="10dp"
+                android:color = "#FFFFFF"
                 android:ems="10"
                 android:inputType="text" />
 
@@ -89,6 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/organization"
                 android:layout_alignStart="@id/organization"
+                android:color = "#FFFFFF"
+
                 android:layout_below="@id/organization"
                 android:layout_marginRight="10dp"
                 android:ems="10"

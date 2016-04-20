@@ -222,7 +222,7 @@ public class fragment_AddQuestMaterial extends Fragment {
                                     Toast.makeText(context, "Add Quest Successful!", Toast.LENGTH_LONG).show();
 
                                     //Return to quest list fragment
-                                    fragment_QuestList fragment1 = new fragment_QuestList();
+                                    fragment_QuestListRecyclerView fragment1 = new fragment_QuestListRecyclerView();
                                     getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
                                 }
                             }

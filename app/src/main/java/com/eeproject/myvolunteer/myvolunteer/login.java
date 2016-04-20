@@ -1,6 +1,7 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -39,6 +40,9 @@ public class login extends Fragment{
     public static String chat_sender;
     View drawer;
 
+    boolean loading;
+    ProgressDialog dialog;
+
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
     @Override
@@ -67,6 +71,27 @@ public class login extends Fragment{
                 }else if(password.getText().toString().equals("")){
                     sethighlight(password, "Password");
                 }else{
+                    loading = true;
+                    dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    dialog.setTitle("Loading");
+                    dialog.setMessage("Please Wait... Our monkeys finding your name on our old school notebook...");
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+                    new Thread(new Runnable(){
+                        @Override
+                        public void run() {
+                            try{
+                                while (loading);
+                            }
+                            catch(Exception e){
+                                e.printStackTrace();
+                            }
+                            finally{
+                                dialog.dismiss();
+                            }
+                        }
+                    }).start();
                     login(username.getText().toString(), password.getText().toString());
 
                 }
@@ -84,7 +109,27 @@ public class login extends Fragment{
                 } else if (password.getText().toString().equals("")) {
                     sethighlight(password, "Password");
                 } else {
-
+                    loading = true;
+                    dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    dialog.setTitle("Loading");
+                    dialog.setMessage("Please Wait... Our monkeys are preparing seats for you...");
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+                    new Thread(new Runnable(){
+                        @Override
+                        public void run() {
+                            try{
+                                while (loading);
+                            }
+                            catch(Exception e){
+                                e.printStackTrace();
+                            }
+                            finally{
+                                dialog.dismiss();
+                            }
+                        }
+                    }).start();
                     rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -103,12 +148,10 @@ public class login extends Fragment{
                                                         user A_user = userSnapshot.getValue(user.class);
                                                         if (!username.getText().toString().equals(A_user.getUsername()))
                                                             register(username.getText().toString(), password.getText().toString());
-
                                                     }
                                                 } else
                                                     register(username.getText().toString(), password.getText().toString());
                                             }
-
                                             @Override
                                             public void onCancelled(FirebaseError firebaseError2) {
                                                 System.out.println("The read failed: " + firebaseError2.getMessage());
@@ -118,9 +161,10 @@ public class login extends Fragment{
                                     }
 
                                 }
-                            } else
+                            } else {
                                 register(username.getText().toString(), password.getText().toString());
-
+                            }
+                            loading = false;
                         }
 
                         @Override
@@ -168,6 +212,7 @@ public class login extends Fragment{
                         title.setText(createuser.getUsername());
                         parameter.setUserID(createuser.getUsername());
 
+                        loading = false;
 
                         Toast.makeText(context, "You login-ed! Welcome!", Toast.LENGTH_SHORT).show();
                         //Jump to fragment_MyAccount
@@ -179,8 +224,8 @@ public class login extends Fragment{
 
                     }
                     else {
+                        loading = false;
                         Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show();
-
                     }
 
                 }
@@ -200,9 +245,7 @@ public class login extends Fragment{
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         user A_user = userSnapshot.getValue(user.class);
                         if (username.equals(A_user.getUsername()) && password.equals(A_user.getPassword()))
-
                             Toast.makeText(context, "Account is being verified", Toast.LENGTH_LONG).show();
-
                     }
                 }
             }
@@ -221,7 +264,6 @@ public class login extends Fragment{
 
     //Perform the register process
     public void register(final String username, String password){
-
         int rand = (int)(Math.random()*10);
         Log.d("Math random: ", String.valueOf(rand));
 

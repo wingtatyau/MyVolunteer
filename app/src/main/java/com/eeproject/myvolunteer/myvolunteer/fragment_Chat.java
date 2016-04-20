@@ -5,7 +5,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,7 @@ public class fragment_Chat extends Fragment {
     List<Integer> originalposition = new ArrayList<>();
     public static String chat_receiver;
 
+    Toolbar toolbar;
 
     int count_Name;
     ListView list;
@@ -67,6 +70,8 @@ public class fragment_Chat extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.chatt_select, null);
         context = container.getContext();
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        toolbar.setTitle("Chatroom");
         setlist(v);
         return v;
     }
@@ -156,8 +161,10 @@ public class fragment_Chat extends Fragment {
             chatt_username.setText(sortedName.get(sortedName.size() - position - 1));
             user_mail.setText(sortedEmail.get(sortedName.size() - position - 1));
 
-            int id = getResources().getIdentifier(sortedIcon.get(sortedName.size() - position - 1), "drawable", "com.eeproject.myvolunteer.myvolunteer");
-            chatt_imageView.setImageResource(id);
+            Bitmap bitmap = image_handler.decode(sortedIcon.get(sortedName.size()-position-1));
+            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
+            Bitmap conv_bm = Bitmap_factory.getRoundedRectBitmap(resized, 200);
+            chatt_imageView.setImageBitmap(conv_bm);
 
             return convertView;
         }

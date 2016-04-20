@@ -2,6 +2,7 @@ package com.eeproject.myvolunteer.myvolunteer;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,6 +39,9 @@ public class fragment_Register extends Fragment{
 
     EditText firstName, lastName, organization;
     Button finish;
+
+    ProgressDialog dialog;
+    boolean loading;
 
     public static ImageView image;
 
@@ -88,6 +92,27 @@ public class fragment_Register extends Fragment{
                     if (lastName.getText().toString().equals("")) {
                         sethighlight(lastName, "Last Name ");
                     } else {
+                        loading = true;
+                        dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+                        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        dialog.setTitle("Loading");
+                        dialog.setMessage("Please Wait... Our monkeys are preparing seats for you...");
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                        new Thread(new Runnable(){
+                            @Override
+                            public void run() {
+                                try{
+                                    while (loading);
+                                }
+                                catch(Exception e){
+                                    e.printStackTrace();
+                                }
+                                finally{
+                                    dialog.dismiss();
+                                }
+                            }
+                        }).start();
                         finish(firstName.getText().toString(), lastName.getText().toString(), organization.getText().toString());
                     }
                 }
@@ -142,9 +167,13 @@ public class fragment_Register extends Fragment{
                 @Override
                 public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                     if (firebaseError != null) {
+                        loading = false;
+
                         System.out.println("Data could not be saved. " + firebaseError.getMessage());
                         Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
                     } else {
+                        loading = false;
+
                         System.out.println("Data saved successfully.");
                         Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();
 
@@ -164,9 +193,11 @@ public class fragment_Register extends Fragment{
                 @Override
                 public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                     if (firebaseError != null) {
+                        loading = false;
                         System.out.println("Data could not be saved. " + firebaseError.getMessage());
                         Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
                     } else {
+                        loading = false;
                         Toast.makeText(context, "Please wait until we approved your account, Thank you!", Toast.LENGTH_LONG).show();
                         //Jump to fragmnet_QuestList
                         fragment_QuestList f1 = new fragment_QuestList();
@@ -178,6 +209,7 @@ public class fragment_Register extends Fragment{
 
 
         }
+
 
     }
 
