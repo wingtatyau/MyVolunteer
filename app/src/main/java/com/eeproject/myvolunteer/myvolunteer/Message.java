@@ -4,7 +4,7 @@ import java.util.Date;
 
 
 /**
- * Created by Ashu on 24/11/15.
+ * Created by HousFamily on 2016/3/15.
  */
 public class Message {
     private String mText;

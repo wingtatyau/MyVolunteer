@@ -2,9 +2,8 @@ package com.eeproject.myvolunteer.myvolunteer;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +33,7 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     //Define for list view
     List<quest> mQuest = new ArrayList<>();
+    List<String> keyList = new ArrayList<>();
 
     //Recycler View adapter
     RecyclerView mRecyclerView;
@@ -44,14 +44,22 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     Toolbar toolbar;
 
+    PassValue passvalue;
 
-    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
+    boolean loading;
+
+    ProgressDialog dialog;
+
+    boolean firstCat = true;
+    boolean firstLan = true;
+
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_questlistrecyclerview, null);
         context = container.getContext();
-        database_loadDatabase.setArrayList(context);
+        //database_loadDatabase.setArrayList(context);
         //mQuest.add(new quest("1", "1", "1", "1", "1", "1", "1", "1", 1, 1, "1"));
         toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         toolbar.setTitle("Quest List");
@@ -60,8 +68,28 @@ public class fragment_QuestListRecyclerView extends Fragment {
         return v;
     }
 
+    //Interface
+    public interface PassValue {
+        public void setKey(positionandkey key);
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            passvalue = (PassValue) activity;
+        } catch (Exception e) {
+            Log.d("Unable to pass key", null);
+        }
+
+    }
+
     //Set up list
     public void setlist(final View v) {
+
+        loading = true;
+        Log.v("Loading", String.valueOf(loading));
 
         catagoryspinner = (Spinner) v.findViewById(R.id.catspinner);
         languagespinner = (Spinner) v.findViewById(R.id.langspinner);
@@ -74,41 +102,77 @@ public class fragment_QuestListRecyclerView extends Fragment {
         
         ArrayAdapter<String> catadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.catagory);
         catagoryspinner.setAdapter(catadapter);
-        catagoryspinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener()
-        {
+
+        catagoryspinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                parameter.sCatagory = parent.getSelectedItem().toString();
-                regeneratelist();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!firstCat) {
+                    parameter.sCatagory = parent.getSelectedItem().toString();
+                    regeneratelist();
+                }
+                firstCat = false;
             }
-        
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-        
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         
         ArrayAdapter<String> langadapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, parameter.language);
         languagespinner.setAdapter(langadapter);
-        languagespinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener()
-        {
+        languagespinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                parameter.sLanguage = parent.getSelectedItem().toString();
-                regeneratelist();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!firstLan) {
+                    parameter.sLanguage = parent.getSelectedItem().toString();
+                    regeneratelist();
+                }
+                firstLan = false;
             }
-        
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-        
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
-        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        // do whatever
+                        Log.v("Clicked Item", String.valueOf(position));
+
+                        positionandkey pak = new positionandkey(keyList.get(position), position);
+                        passvalue.setKey(pak);
+                        Log.d("Key passed", keyList.get(position));
+                        Log.d("Position passed", String.valueOf(position));
+                    }
+                })
+        );
+        dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setTitle("Loading");
+        dialog.setMessage("Please Wait... Our monkeys are grabbing data down...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    while (loading);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+                finally{
+                    dialog.dismiss();
+                }
+            }
+        }).start();
+
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) {
@@ -116,12 +180,18 @@ public class fragment_QuestListRecyclerView extends Fragment {
                     for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
                         quest quest = questsnapshot.getValue(quest.class);
                         mQuest.add(quest);
+                        keyList.add(questsnapshot.getKey());
                         Log.d("mQuest", "Add success");
+                        Log.d("keyList", questsnapshot.getKey());
                     }
+                    parameter.list = mQuest;
+                }else {
+                    Log.d("mQuest", "Add fail");
                 }
-                Log.d("mQuest", "Add fail");
-
                 mAdapter.notifyDataSetChanged();
+                loading = false;
+                Log.v("Loading", String.valueOf(loading));
+
             }
 
             @Override
@@ -134,18 +204,40 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     private void regeneratelist()
     {
-    
+        loading = true;
+
+        dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setTitle("Loading");
+        dialog.setMessage("Please Wait... Our monkeys are grabbing data down...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    while (loading);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+                finally{
+                    dialog.dismiss();
+                }
+            }
+        }).start();
+
         Log.v("Inside sCatagory", parameter.sCatagory);
         Log.v("Inside sLanguage", parameter.sLanguage);
     
-        rootRef.child("Quest").addListenerForSingleValueEvent(new ValueEventListener()
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-    
+
                 mQuest.clear();
-    
+
                 if (dataSnapshot.getChildrenCount() > 0)
                 {
                     int index = 0;
@@ -167,16 +259,18 @@ public class fragment_QuestListRecyclerView extends Fragment {
                         }
                     }
                     mAdapter.notifyDataSetChanged();
+                    parameter.list = mQuest;
+                    loading = false;
                 }
             }
-    
+
             @Override
             public void onCancelled (FirebaseError firebaseError)
             {
-    
+
             }
         }
-    
+
         );
     
     }
@@ -195,4 +289,8 @@ public class fragment_QuestListRecyclerView extends Fragment {
         mAdapter = new adapter_QuestListRecyclerView(mQuest);
         mRecyclerView.setAdapter(mAdapter);
     }
+
+
+
 }
+

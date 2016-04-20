@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by Ashu on 24/11/15.
+ * Created by HousFamily on 2016/3/15.
  */
 public class MessageDataSource {
     private static final Firebase sRef = new Firebase("https://resplendent-torch-5414.firebaseio.com/");
@@ -27,7 +27,7 @@ public class MessageDataSource {
         String key = sDateFormat.format(date);
         HashMap<String, String> msg = new HashMap<>();
         msg.put(COLUMN_TEXT, message.getText());
-        msg.put(COLUMN_SENDER,"Ajay");
+        msg.put(COLUMN_SENDER,login.chat_sender);
         sRef.child(convoId).child(key).setValue(msg);
     }
 

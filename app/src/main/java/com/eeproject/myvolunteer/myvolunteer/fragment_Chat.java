@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.facedemo.facedemo.ChatActivity;
 import com.firebase.client.DataSnapshot;
@@ -43,11 +43,19 @@ public class fragment_Chat extends Fragment {
     List<String> sortedEmail = new ArrayList<>();
     List<String> sortedIcon = new ArrayList<>();
     List<Integer> originalposition = new ArrayList<>();
+    public static String chat_receiver;
 
-    Toolbar toolbar;
+
+    int count_Name;
     ListView list;
 
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
+
+    private void return2myac()
+    {
+        fragment_MyAccount fragment1 = new  fragment_MyAccount();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, fragment1).commit();
+    }
 
     private void changepage()
     {
@@ -59,12 +67,9 @@ public class fragment_Chat extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.chatt_select, null);
         context = container.getContext();
-        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-        toolbar.setTitle("Contact List");
         setlist(v);
         return v;
     }
-
 
     public void setlist(final View v) {
 
@@ -81,6 +86,7 @@ public class fragment_Chat extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) {
 
+                    count_Name = -1;
                     int index = 0;
                     for (DataSnapshot usersnapshot : dataSnapshot.getChildren()) {
                         user user = usersnapshot.getValue(user.class);
@@ -88,12 +94,15 @@ public class fragment_Chat extends Fragment {
                         sortedName.add(user.getFirstname());
                         sortedEmail.add(user.getUsername());
                         originalposition.add(index++);
+                        count_Name++;
                     }
 
                     adapter.notifyDataSetChanged();
                 } else
                     Log.v(ACTIVITY_TAG, "Cant work for reading");
+
             }
+
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -101,13 +110,18 @@ public class fragment_Chat extends Fragment {
             }
         });
 
+
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                chat_receiver = sortedName.get(count_Name - position);
+                Log.v(ACTIVITY_TAG, chat_receiver);
                 changepage();
             }
         });
     }
+
 
     public class ListAdapter extends BaseAdapter {
         private LayoutInflater ListInflater;

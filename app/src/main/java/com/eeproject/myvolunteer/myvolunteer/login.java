@@ -36,6 +36,7 @@ public class login extends Fragment{
     TextView register;
     Button submit;
 
+    public static String chat_sender;
     View drawer;
 
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
@@ -138,6 +139,8 @@ public class login extends Fragment{
     //Perform the login process
     public void login(final String username, final String password){
 
+        Log.v("login.java", "Perform the login process");
+
         rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -146,7 +149,7 @@ public class login extends Fragment{
                     user f_user = userSnapshot.getValue(user.class);
                     Log.v("True User?: ", String.valueOf(username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())));
                     if (username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())) {
-
+                        chat_sender = f_user.getFirstname();
                         parameter.login.set(true);
 
                         TextView displayusername = (TextView) drawer.findViewById(R.id.name);

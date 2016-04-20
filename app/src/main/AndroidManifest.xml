@@ -40,12 +40,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- My custom receiver -->
-        <receiver android:name=".ParseReceiver" >
-            <intent-filter>
-                <action android:name="com.makemyandroidapp.parsenotificationexample.RECEIVE_PUSH" />
-            </intent-filter>
-        </receiver>
     </application>
 </manifest>

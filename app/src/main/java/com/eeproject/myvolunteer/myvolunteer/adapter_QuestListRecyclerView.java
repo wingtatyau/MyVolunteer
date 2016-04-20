@@ -1,6 +1,7 @@
 package com.eeproject.myvolunteer.myvolunteer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.List;
 public class adapter_QuestListRecyclerView extends RecyclerView.Adapter<adapter_QuestListRecyclerView.ViewHolder>{
     private List<quest> mQuest;
     private Context context;
+    Bitmap bitmap;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, expirydate, info;
@@ -49,9 +51,12 @@ public class adapter_QuestListRecyclerView extends RecyclerView.Adapter<adapter_
         holder.title.setText(temp.getTitle());
         holder.expirydate.setText(temp.getExpirydate());
         holder.info.setText(temp.getInfo());
+//
+//        int id = context.getResources().getIdentifier(temp.getIcon(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
+//        holder.questicon.setImageResource(id);
 
-        int id = context.getResources().getIdentifier(temp.getIcon(), "drawable", "com.eeproject.myvolunteer.myvolunteer");
-        holder.questicon.setImageResource(id);
+        bitmap = image_handler.decode(temp.getIcon());
+        holder.questicon.setImageBitmap(bitmap);
     }
 
     @Override

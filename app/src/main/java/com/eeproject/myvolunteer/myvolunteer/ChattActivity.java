@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eeproject.myvolunteer.myvolunteer.R;
 
@@ -46,22 +46,23 @@ public class ChattActivity extends Fragment implements View.OnClickListener,
     private MessageDataSource.MessagesListener mListener;
     final String ACTIVITY_TAG="LogDemo";
 
-    private Toolbar toolbar;
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//		setContentView(R.layout.layout_chat);
+//		getActivity().getWindow().setSoftInputMode(
+//				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
-    @Nullable
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_mian, null);
         initView(v);
+
         return v;
     }
 
     public void initView(View v) {
-        mRecipient = "Ashok";
+        mRecipient = fragment_Chat.chat_receiver;
 
         mListView = (ListView)v.findViewById(R.id.messages_list);
         mListView.setAdapter(mAdapter);
@@ -70,13 +71,10 @@ public class ChattActivity extends Fragment implements View.OnClickListener,
         mListView.setAdapter(mAdapter);
         newMessageView = (EditText) v.findViewById(R.id.new_message);
 
-        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-        toolbar.setTitle(mRecipient);
-
         sendMessage = (Button)v.findViewById(R.id.send_message);
         sendMessage.setOnClickListener(this);
 
-        String[] ids = {"Ashok","-", "Ajay"};
+        String[] ids = {fragment_Chat.chat_receiver,"-", login.chat_sender};
         Arrays.sort(ids);
         mConvoId = ids[0]+ids[1]+ids[2];
 
@@ -85,15 +83,15 @@ public class ChattActivity extends Fragment implements View.OnClickListener,
 
     public void onClick(View v)
     {
-                newMessage = newMessageView.getText().toString();
-                Log.v(ACTIVITY_TAG, newMessage + "dummy");
-                newMessageView.setText("");
-                Message msg = new Message();
-                msg.setDate(new Date());
-                msg.setText(newMessage);
-                msg.setSender("Ajay");
+        newMessage = newMessageView.getText().toString();
+        Log.v(ACTIVITY_TAG, newMessage + "dummy");
+        newMessageView.setText("");
+        Message msg = new Message();
+        msg.setDate(new Date());
+        msg.setText(newMessage);
+        msg.setSender(login.chat_sender);
 
-                MessageDataSource.saveMessage(msg, mConvoId);
+        MessageDataSource.saveMessage(msg, mConvoId);
     }
 
     @Override
@@ -124,7 +122,7 @@ public class ChattActivity extends Fragment implements View.OnClickListener,
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
 
             int sdk = Build.VERSION.SDK_INT;
-            if (message.getSender().equals("Ashok")){
+            if (message.getSender().equals(fragment_Chat.chat_receiver)){
                 if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
                     nameView.setBackground(getResources().getDrawable(R.drawable.bubble_left_gray));
                 } else{
