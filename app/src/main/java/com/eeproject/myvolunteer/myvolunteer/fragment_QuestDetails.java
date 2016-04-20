@@ -92,22 +92,26 @@ public class fragment_QuestDetails extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            int newParti = dataSnapshot.child("currentparti").getValue(Integer.class) + 1;
+                            if(dataSnapshot.child("currentparti").getValue(Integer.class) < dataSnapshot.child("partinumber").getValue(Integer.class)) {
+                                int newParti = dataSnapshot.child("currentparti").getValue(Integer.class) + 1;
 
-                            rootRef.child(pak.getKey()).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
-                                @Override
-                                public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                                    if (firebaseError != null) {
-                                        System.out.println("Data could not be saved. " + firebaseError.getMessage());
-                                        Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        System.out.println("Data saved successfully.");
+                                rootRef.child(pak.getKey()).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
+                                    @Override
+                                    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                        if (firebaseError != null) {
+                                            System.out.println("Data could not be saved. " + firebaseError.getMessage());
+                                            Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            System.out.println("Data saved successfully.");
 
-                                        getinformation();
-                                        Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
+                                            getinformation();
+                                            Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                Toast.makeText(context, "It is full already. Thank you for your kindness.", Toast.LENGTH_LONG).show();
+                            }
 
                         }
                         @Override

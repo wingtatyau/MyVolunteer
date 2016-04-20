@@ -50,8 +50,8 @@ public class fragment_QuestListRecyclerView extends Fragment {
 
     ProgressDialog dialog;
 
-    boolean firstCat = true;
-    boolean firstLan = true;
+    boolean firstCat;
+    boolean firstLan;
 
     Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
 
@@ -61,6 +61,8 @@ public class fragment_QuestListRecyclerView extends Fragment {
         context = container.getContext();
         //database_loadDatabase.setArrayList(context);
         //mQuest.add(new quest("1", "1", "1", "1", "1", "1", "1", "1", 1, 1, "1"));
+        firstCat = true;
+        firstLan = true;
         toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         toolbar.setTitle("Quest List");
         setmRecyclerView(v);
