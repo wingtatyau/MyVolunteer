@@ -187,11 +187,14 @@ public class login extends Fragment{
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println("There are " + snapshot.getChildrenCount() + " approved users");
                 boolean foundUser = false;
+                int rand = (int)(Math.random()*10);
+                user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", 0, 0);
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     user f_user = userSnapshot.getValue(user.class);
                     Log.v("True User?: ", String.valueOf(username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())));
                     if (username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())) {
                         foundUser = true;
+                        Log.v("foundUser", String.valueOf(foundUser));
                         chat_sender = f_user.getFirstname();
                         parameter.login.set(true);
 
@@ -206,24 +209,13 @@ public class login extends Fragment{
                         int questIssuedList = f_user.getQuest_issued();
                         int questAcceptedList = f_user.getQuest_accepted();
                         parameter.loginedKey = userSnapshot.getKey();
-                        user createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
-
-                        TextView title = (TextView) drawer.findViewById(R.id.name);
-                        title.setText(createuser.getUsername());
-                        //parameter.setUserID(createuser.getUsername());
-
-                        loading = false;
-
-                        Toast.makeText(context, "You login-ed! Welcome!", Toast.LENGTH_SHORT).show();
-                        //Jump to fragment_MyAccount
-                        fragment_MyAccount f1 = new fragment_MyAccount();
-                        parameter.logineduser = createuser;
-                        f1.setUser(createuser);
-                        getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
+                        createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
 
 
                     }
-                    else if(foundUser = false){
+                    else if(!foundUser){
+
+                        Log.v("foundUser", String.valueOf(foundUser));
 
                         rootRef.child("User to be approved").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -245,11 +237,27 @@ public class login extends Fragment{
                             }
                         });
                     }
-                    else {
-                        loading = false;
-                        Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show();
-                    }
 
+
+                }
+
+                if(foundUser){
+                    TextView title = (TextView) drawer.findViewById(R.id.name);
+                    title.setText(createuser.getUsername());
+                    //parameter.setUserID(createuser.getUsername());
+
+                    loading = false;
+
+                    Toast.makeText(context, "You login-ed! Welcome!", Toast.LENGTH_SHORT).show();
+                    //Jump to fragment_MyAccount
+                    fragment_MyAccount f1 = new fragment_MyAccount();
+                    parameter.logineduser = createuser;
+                    f1.setUser(createuser);
+                    getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
+                }
+                else {
+                    loading = false;
+                    Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 }
             }
 
