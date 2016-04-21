@@ -12,12 +12,12 @@ public class user {
     private String firstname;
     private String lastname;
     private String organization;
-    private String quest_issued;
-    private String quest_accepted;
+    private int quest_issued;
+    private int quest_accepted;
     //--------------------------
 
     public user(String username, String password, int ranking_mark, String iconpath,
-                String firstname, String lastname, String organization, String quest_issued, String quest_accepted){    //added by Tat
+                String firstname, String lastname, String organization, int quest_issued, int quest_accepted){    //added by Tat
         setUsername(username);
         setPassword(password);
         setIconpath(iconpath);
@@ -63,11 +63,11 @@ public class user {
         this.organization = organization;
     }
 
-    public void setQuest_issued(String quest_issued) {
+    public void setQuest_issued(int quest_issued) {
         this.quest_issued = quest_issued;
     }
 
-    public void setQuest_accepted(String quest_accepted) {
+    public void setQuest_accepted(int quest_accepted) {
         this.quest_accepted = quest_accepted;
     }
     //-------------------------------------------------
@@ -101,11 +101,11 @@ public class user {
         return organization;
     }
 
-    public String getQuest_issued(){
+    public int getQuest_issued(){
         return quest_issued;
     }
 
-    public String getQuest_accepted(){
+    public int getQuest_accepted(){
         return quest_accepted;
     }
     //-------------------------------------------------

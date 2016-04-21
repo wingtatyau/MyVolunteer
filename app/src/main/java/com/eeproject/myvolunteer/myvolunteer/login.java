@@ -66,11 +66,11 @@ public class login extends Fragment{
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(username.getText().toString().equals("")){
+                if (username.getText().toString().equals("")) {
                     sethighlight(username, "Username");
-                }else if(password.getText().toString().equals("")){
+                } else if (password.getText().toString().equals("")) {
                     sethighlight(password, "Password");
-                }else{
+                } else {
                     loading = true;
                     dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
                     dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -78,16 +78,14 @@ public class login extends Fragment{
                     dialog.setMessage("Please Wait... Our monkeys finding your name on our old school notebook...");
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
-                    new Thread(new Runnable(){
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try{
-                                while (loading);
-                            }
-                            catch(Exception e){
+                            try {
+                                while (loading) ;
+                            } catch (Exception e) {
                                 e.printStackTrace();
-                            }
-                            finally{
+                            } finally {
                                 dialog.dismiss();
                             }
                         }
@@ -116,16 +114,14 @@ public class login extends Fragment{
                     dialog.setMessage("Please Wait... Our monkeys are preparing seats for you...");
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
-                    new Thread(new Runnable(){
+                    new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try{
-                                while (loading);
-                            }
-                            catch(Exception e){
+                            try {
+                                while (loading) ;
+                            } catch (Exception e) {
                                 e.printStackTrace();
-                            }
-                            finally{
+                            } finally {
                                 dialog.dismiss();
                             }
                         }
@@ -152,6 +148,7 @@ public class login extends Fragment{
                                                 } else
                                                     register(username.getText().toString(), password.getText().toString());
                                             }
+
                                             @Override
                                             public void onCancelled(FirebaseError firebaseError2) {
                                                 System.out.println("The read failed: " + firebaseError2.getMessage());
@@ -189,10 +186,12 @@ public class login extends Fragment{
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println("There are " + snapshot.getChildrenCount() + " approved users");
+                boolean foundUser = false;
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     user f_user = userSnapshot.getValue(user.class);
                     Log.v("True User?: ", String.valueOf(username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())));
                     if (username.equals(f_user.getUsername()) && password.equals(f_user.getPassword())) {
+                        foundUser = true;
                         chat_sender = f_user.getFirstname();
                         parameter.login.set(true);
 
@@ -204,8 +203,8 @@ public class login extends Fragment{
                         String firstName = f_user.getFirstname();
                         String lastName = f_user.getLastname();
                         String organization = f_user.getOrganization();
-                        String questIssuedList = f_user.getQuest_issued();
-                        String questAcceptedList = f_user.getQuest_accepted();
+                        int questIssuedList = f_user.getQuest_issued();
+                        int questAcceptedList = f_user.getQuest_accepted();
                         user createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
 
                         TextView title = (TextView) drawer.findViewById(R.id.name);
@@ -223,6 +222,28 @@ public class login extends Fragment{
 
 
                     }
+                    else if(foundUser = false){
+
+                        rootRef.child("User to be approved").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                System.out.println("There are " + dataSnapshot.getChildrenCount() + " users to be approved");
+                                if (dataSnapshot.getChildrenCount() > 0) {
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        user A_user = userSnapshot.getValue(user.class);
+                                        if (username.equals(A_user.getUsername()) && password.equals(A_user.getPassword())) {
+                                            Toast.makeText(context, "Account is being verified", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError2) {
+                                System.out.println("The read failed: " + firebaseError2.getMessage());
+                            }
+                        });
+                    }
                     else {
                         loading = false;
                         Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show();
@@ -237,24 +258,6 @@ public class login extends Fragment{
             }
         });
 
-        rootRef.child("User to be approved").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("There are " + dataSnapshot.getChildrenCount() + " users to be approved");
-                if (dataSnapshot.getChildrenCount() > 0) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        user A_user = userSnapshot.getValue(user.class);
-                        if (username.equals(A_user.getUsername()) && password.equals(A_user.getPassword()))
-                            Toast.makeText(context, "Account is being verified", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError2) {
-                System.out.println("The read failed: " + firebaseError2.getMessage());
-            }
-        });
 
 
 
@@ -329,7 +332,7 @@ public class login extends Fragment{
 
 
         if(validEmail) {
-            user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", "No Quest Issued yet", "No Quest Accepted yet");
+            user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", 0, 0);
             Log.d("Username: ", createuser.getUsername());
             Toast.makeText(context, "Register Successful!", Toast.LENGTH_LONG).show();
             Log.d("Username11221: ", createuser.getUsername());

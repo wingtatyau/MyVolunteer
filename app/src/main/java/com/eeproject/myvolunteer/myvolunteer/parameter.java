@@ -17,7 +17,7 @@ public class parameter {
     public static String[] edittextname = {"Title", "Information", "Date", "Location", "Partcipant", "Hour", "Minute"};
     public static AtomicBoolean login = new AtomicBoolean(false);
     public static AtomicBoolean remeberme = new AtomicBoolean(false);
-    public static user logineduser = new user("Guest", null, 0, "nomorequestion", "Guest", null, null, null, null);
+    public static user logineduser = new user("Guest", null, 0, "nomorequestion", "Guest", null, null, 0, 0);
     public static int userID;
     public static String sCatagory;
     public static String sLanguage;

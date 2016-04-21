@@ -82,10 +82,23 @@ public class fragment_MyAccount extends Fragment {
         organization.setText(user.getOrganization());
         contactleft.setText("Email");
         contactright.setText(user.getUsername());
-        issueleft.setText(user.getQuest_issued());
-        issueright.setText(" ");
-        acceptleft.setText(user.getQuest_accepted());
-        acceptright.setText(" ");
+
+        if(user.getQuest_issued() > 0) {
+            issueleft.setText("Total");
+            issueright.setText(String.valueOf(user.getQuest_issued()));
+        } else {
+            issueleft.setText("No Quest Issued yet");
+            issueright.setText(" ");
+        }
+
+        if(user.getQuest_accepted() > 0) {
+            acceptleft.setText("Total");
+            acceptright.setText(String.valueOf(user.getQuest_accepted()));
+        } else {
+            acceptleft.setText("No Quest Accepted yet");
+            acceptright.setText(" ");
+        }
+
 
         Bitmap temp = image_handler.decode(user.getIconpath());
         Bitmap resized = Bitmap.createScaledBitmap(temp, 400, 400, true);
