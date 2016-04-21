@@ -21,6 +21,7 @@ public class parameter {
     public static int userID;
     public static String sCatagory;
     public static String sLanguage;
+    public static String loginedKey;
 
     public static List<quest> list = new ArrayList<>();
 

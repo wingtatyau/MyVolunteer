@@ -70,6 +70,7 @@ public class user {
     public void setQuest_accepted(int quest_accepted) {
         this.quest_accepted = quest_accepted;
     }
+
     //-------------------------------------------------
 
     public String getUsername(){

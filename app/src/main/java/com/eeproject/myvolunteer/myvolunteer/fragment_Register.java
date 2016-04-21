@@ -162,7 +162,7 @@ public class fragment_Register extends Fragment{
             //For personal use account
 
             Log.v("DEBUGGING", user.getUsername());
-            Firebase f_user = rootRef.child("User").child(user.getFirstname());
+            Firebase f_user = rootRef.child("User").push();
             f_user.setValue(user, new Firebase.CompletionListener() {
                 @Override
                 public void onComplete(FirebaseError firebaseError, Firebase firebase) {

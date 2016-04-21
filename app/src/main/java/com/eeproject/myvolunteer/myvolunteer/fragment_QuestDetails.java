@@ -41,7 +41,7 @@ public class fragment_QuestDetails extends Fragment {
     positionandkey pak;
     Toolbar toolbar;
 
-    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/Quest");
+    Firebase rootRef = new Firebase("https://blistering-fire-9077.firebaseio.com/android/");
 
 
     @Override
@@ -88,14 +88,30 @@ public class fragment_QuestDetails extends Fragment {
                 }else {
 
 
-                    rootRef.child(pak.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    rootRef.child("Quest").child(pak.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             if(dataSnapshot.child("currentparti").getValue(Integer.class) < dataSnapshot.child("partinumber").getValue(Integer.class)) {
                                 int newParti = dataSnapshot.child("currentparti").getValue(Integer.class) + 1;
+                                parameter.logineduser.setQuest_accepted(parameter.logineduser.getQuest_accepted() + 1);
 
-                                rootRef.child(pak.getKey()).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
+                                rootRef.child("User").child(parameter.loginedKey).child("quest_accepted").setValue(parameter.logineduser.getQuest_accepted(), new Firebase.CompletionListener() {
+                                    @Override
+                                    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                        if (firebaseError != null) {
+                                            System.out.println("Data could not be saved. " + firebaseError.getMessage());
+                                            Toast.makeText(context, "Register unsuccessful!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            System.out.println("Data saved successfully.");
+
+                                            getinformation();
+                                            Toast.makeText(context, "Quest Accepted!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+                                rootRef.child("Quest").child(pak.getKey()).child("currentparti").setValue(newParti, new Firebase.CompletionListener() {
                                     @Override
                                     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                                         if (firebaseError != null) {
@@ -152,7 +168,7 @@ public class fragment_QuestDetails extends Fragment {
         bitmap = image_handler.decode(quest.getIcon());
         icon.setImageBitmap(bitmap);
 
-        rootRef.child(pak.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+        rootRef.child("Quest").child(pak.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v("TP=0", "printed");

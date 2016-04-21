@@ -180,7 +180,7 @@ public class login extends Fragment{
     //Perform the login process
     public void login(final String username, final String password){
 
-        Log.v("login.java", "Perform the login process");
+        Log.v("login", "Perform the login process");
 
         rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -205,11 +205,12 @@ public class login extends Fragment{
                         String organization = f_user.getOrganization();
                         int questIssuedList = f_user.getQuest_issued();
                         int questAcceptedList = f_user.getQuest_accepted();
+                        parameter.loginedKey = userSnapshot.getKey();
                         user createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
 
                         TextView title = (TextView) drawer.findViewById(R.id.name);
                         title.setText(createuser.getUsername());
-                        parameter.setUserID(createuser.getUsername());
+                        //parameter.setUserID(createuser.getUsername());
 
                         loading = false;
 
