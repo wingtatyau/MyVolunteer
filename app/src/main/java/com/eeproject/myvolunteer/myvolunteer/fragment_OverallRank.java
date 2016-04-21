@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -143,8 +144,10 @@ public class fragment_OverallRank extends Fragment {
             mark.setText("Mark: " + sortedMark.get(sortedName.size() - position - 1));
             name.setText(sortedName.get(sortedName.size() - position - 1));
 
-            int id = getResources().getIdentifier(sortedIcon.get(sortedName.size() - position - 1), "drawable", "com.eeproject.myvolunteer.myvolunteer");
-            imageView.setImageResource(id);
+            Bitmap bitmap = image_handler.decode(sortedIcon.get(sortedName.size()-position-1));
+            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
+            Bitmap conv_bm = Bitmap_factory.getRoundedRectBitmap(resized, 200);
+            imageView.setImageBitmap(conv_bm);
 
             return convertView;
         }

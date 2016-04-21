@@ -41,9 +41,6 @@ public class fragment_Ranking extends Fragment {
     Toolbar toolbar;
     user user;
 
-    public void setUser(user user){
-        this.user = user;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +49,8 @@ public class fragment_Ranking extends Fragment {
 
         toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         toolbar.setTitle("Ranking");
+
+        user = parameter.logineduser;
         setlist(v);
         return v;
     }
