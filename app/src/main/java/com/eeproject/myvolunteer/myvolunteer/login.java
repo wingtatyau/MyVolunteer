@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,27 +73,31 @@ public class login extends Fragment{
                 } else if (password.getText().toString().equals("")) {
                     sethighlight(password, "Password");
                 } else {
-                    loading = true;
-                    dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
-                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    dialog.setTitle("Loading");
-                    dialog.setMessage("Please Wait... Our monkeys finding your name on our old school notebook...");
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                while (loading) ;
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                dialog.dismiss();
-                            }
-                        }
-                    }).start();
-                    login(username.getText().toString(), password.getText().toString());
 
+                    if(isInternetWorking()) {
+                        loading = true;
+                        dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+                        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        dialog.setTitle("Loading");
+                        dialog.setMessage("Please Wait... Our monkeys finding your name on our old school notebook...");
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    while (loading) ;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    dialog.dismiss();
+                                }
+                            }
+                        }).start();
+                        login(username.getText().toString(), password.getText().toString());
+                    }else {
+                        Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -107,69 +113,72 @@ public class login extends Fragment{
                 } else if (password.getText().toString().equals("")) {
                     sethighlight(password, "Password");
                 } else {
-                    loading = true;
-                    dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
-                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    dialog.setTitle("Loading");
-                    dialog.setMessage("Please Wait... Our monkeys are preparing seats for you...");
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                while (loading) ;
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                dialog.dismiss();
+                    if (isInternetWorking()) {
+                        loading = true;
+                        dialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+                        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        dialog.setTitle("Loading");
+                        dialog.setMessage("Please Wait... Our monkeys are preparing seats for you...");
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    while (loading) ;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    dialog.dismiss();
+                                }
                             }
-                        }
-                    }).start();
-                    rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
-                            System.out.println("There are " + snapshot.getChildrenCount() + " approved users");
-                            if (snapshot.getChildrenCount() > 0) {
-                                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                                    user f_user = userSnapshot.getValue(user.class);
-                                    if (!username.getText().toString().equals(f_user.getUsername())) {
+                        }).start();
+                        rootRef.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                System.out.println("There are " + snapshot.getChildrenCount() + " approved users");
+                                if (snapshot.getChildrenCount() > 0) {
+                                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                                        user f_user = userSnapshot.getValue(user.class);
+                                        if (!username.getText().toString().equals(f_user.getUsername())) {
 
-                                        rootRef.child("User to be approved").addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                System.out.println("There are " + dataSnapshot.getChildrenCount() + " users to be approved");
-                                                if (dataSnapshot.getChildrenCount() > 0) {
-                                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                                                        user A_user = userSnapshot.getValue(user.class);
-                                                        if (!username.getText().toString().equals(A_user.getUsername()))
-                                                            register(username.getText().toString(), password.getText().toString());
-                                                    }
-                                                } else
-                                                    register(username.getText().toString(), password.getText().toString());
-                                            }
+                                            rootRef.child("User to be approved").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    System.out.println("There are " + dataSnapshot.getChildrenCount() + " users to be approved");
+                                                    if (dataSnapshot.getChildrenCount() > 0) {
+                                                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                                            user A_user = userSnapshot.getValue(user.class);
+                                                            if (!username.getText().toString().equals(A_user.getUsername()))
+                                                                register(username.getText().toString(), password.getText().toString());
+                                                        }
+                                                    } else
+                                                        register(username.getText().toString(), password.getText().toString());
+                                                }
 
-                                            @Override
-                                            public void onCancelled(FirebaseError firebaseError2) {
-                                                System.out.println("The read failed: " + firebaseError2.getMessage());
-                                            }
-                                        });
+                                                @Override
+                                                public void onCancelled(FirebaseError firebaseError2) {
+                                                    System.out.println("The read failed: " + firebaseError2.getMessage());
+                                                }
+                                            });
+
+                                        }
 
                                     }
-
+                                } else {
+                                    register(username.getText().toString(), password.getText().toString());
                                 }
-                            } else {
-                                register(username.getText().toString(), password.getText().toString());
+                                loading = false;
                             }
-                            loading = false;
-                        }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-                            System.out.println("The read failed: " + firebaseError.getMessage());
-                        }
-                    });
-
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                System.out.println("The read failed: " + firebaseError.getMessage());
+                            }
+                        });
+                    }else {
+                        Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -187,7 +196,7 @@ public class login extends Fragment{
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println("There are " + snapshot.getChildrenCount() + " approved users");
                 boolean foundUser = false;
-                int rand = (int)(Math.random()*10);
+                int rand = (int) (Math.random() * 10);
                 user createuser = new user(username, password, 0, parameter.defaulticonpath[rand], " ", " ", " ", 0, 0);
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     user f_user = userSnapshot.getValue(user.class);
@@ -212,8 +221,7 @@ public class login extends Fragment{
                         createuser = new user(username, password, ranking_mark, iconpath, firstName, lastName, organization, questIssuedList, questAcceptedList);
 
 
-                    }
-                    else if(!foundUser){
+                    } else if (!foundUser) {
 
                         Log.v("foundUser", String.valueOf(foundUser));
 
@@ -241,7 +249,7 @@ public class login extends Fragment{
 
                 }
 
-                if(foundUser){
+                if (foundUser) {
                     TextView title = (TextView) drawer.findViewById(R.id.name);
                     title.setText(createuser.getUsername());
                     //parameter.setUserID(createuser.getUsername());
@@ -254,8 +262,7 @@ public class login extends Fragment{
                     parameter.logineduser = createuser;
                     f1.setUser(createuser);
                     getFragmentManager().beginTransaction().replace(R.id.content_container, f1).commit();
-                }
-                else {
+                } else {
                     loading = false;
                     Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 }
@@ -358,5 +365,17 @@ public class login extends Fragment{
     public void sethighlight(EditText v, String type){
         v.setHint(type + " cannot be empty!");
         v.setHintTextColor(Color.GRAY);
+    }
+
+    private boolean isInternetWorking() {
+
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
     }
 }

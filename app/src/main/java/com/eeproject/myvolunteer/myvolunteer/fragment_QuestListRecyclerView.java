@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import com.firebase.client.DataSnapshot;
@@ -22,6 +27,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,9 +98,6 @@ public class fragment_QuestListRecyclerView extends Fragment {
     //Set up list
     public void setlist(final View v) {
 
-        loading = true;
-        Log.v("Loading", String.valueOf(loading));
-
         catagoryspinner = (Spinner) v.findViewById(R.id.catspinner);
         languagespinner = (Spinner) v.findViewById(R.id.langspinner);
         
@@ -110,7 +115,11 @@ public class fragment_QuestListRecyclerView extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!firstCat) {
                     parameter.sCatagory = parent.getSelectedItem().toString();
-                    regeneratelist();
+                    if (isInternetWorking()) {
+                        regeneratelist();
+                    }else {
+                        Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 firstCat = false;
             }
@@ -128,7 +137,11 @@ public class fragment_QuestListRecyclerView extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!firstLan) {
                     parameter.sLanguage = parent.getSelectedItem().toString();
-                    regeneratelist();
+                    if(isInternetWorking()) {
+                        regeneratelist();
+                    }else {
+                        Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 firstLan = false;
             }
@@ -174,33 +187,41 @@ public class fragment_QuestListRecyclerView extends Fragment {
             }
         }).start();
 
-        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() > 0) {
-                    mQuest.clear();
-                    for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
-                        quest quest = questsnapshot.getValue(quest.class);
-                        mQuest.add(quest);
-                        keyList.add(questsnapshot.getKey());
-                        Log.d("mQuest", "Add success");
-                        Log.d("keyList", questsnapshot.getKey());
+        if(isInternetWorking()){
+
+            loading = true;
+            Log.v("Loading", String.valueOf(loading));
+
+            rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getChildrenCount() > 0) {
+                        mQuest.clear();
+                        for (DataSnapshot questsnapshot : dataSnapshot.getChildren()) {
+                            quest quest = questsnapshot.getValue(quest.class);
+                            mQuest.add(quest);
+                            keyList.add(questsnapshot.getKey());
+                            Log.d("mQuest", "Add success");
+                            Log.d("keyList", questsnapshot.getKey());
+                        }
+                        parameter.list = mQuest;
+                    }else {
+                        Log.d("mQuest", "Add fail");
                     }
-                    parameter.list = mQuest;
-                }else {
-                    Log.d("mQuest", "Add fail");
+                    mAdapter.notifyDataSetChanged();
+                    loading = false;
+                    Log.v("Loading", String.valueOf(loading));
+
                 }
-                mAdapter.notifyDataSetChanged();
-                loading = false;
-                Log.v("Loading", String.valueOf(loading));
 
-            }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+                }
+            });
+        } else {
+            Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -292,6 +313,17 @@ public class fragment_QuestListRecyclerView extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    private boolean isInternetWorking() {
+
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
+    }
 
 
 }
